@@ -278,6 +278,7 @@
         
         .search-container {
             margin-bottom: 60px;
+            margin-top: 60px;
         }
         
         .search-box {
@@ -410,7 +411,7 @@
             <a href="{% url 'home' %}">Головна</a>
             <a href="{% url 'creature_list' %}">Усі істоти</a>
             <a href="{% url 'usage' %}">Умови використання</a>
-            <a href="{% url 'about_us' %}">Про нас</a>
+            <a href="#">Про нас</a>
         </div>
         <div class="nav-right">
             <form method="get" action="{% url 'home' %}" class="mini-search">
@@ -424,34 +425,37 @@
     </nav>
     
     <div class="main-content">
-    <img src="{% static 'frog.png' %}" alt="Frog" style="width: 150px; margin-top: 50px;">
-    
-    <!-- Header with lines -->
-    <div class="header-container" style="display: flex; flex-direction: column; align-items: center;">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 30px; width: 100%;">
-            <img src="{% static 'line.png' %}" alt="Line left" height="130px" width=auto>
-            <h1 class="page-title">Занурся в легенди</h1>
-            <img src="{% static 'line.png' %}" alt="Line right" height="130px" width=auto>
-        </div>
-         <p class="page-subtitle">українського краю</p>
-    </div>
-    
-    <div class="search-container">
+         <div class="search-container">
         <form method="get" action="{% url 'home' %}" class="search-box">
             <input type="text" name="q" placeholder="Ваш запит" value="{{ query|default:'' }}">
             <button type="submit">Шукати</button>
         </form>
     </div>
     
-    <div class="creatures-grid">
-        {% for creature in creatures %}
-        <a href="{% url 'chuhaister' creature.id %}" class="creature-card card-color-{{ forloop.counter }}">
-    <img src="{{ creature.image_url }}" alt="{{ creature.name }}" class="card-image">
-    <div class="card-content">
-        {{ creature.name }}
-    </div>
-</a>
-        {% endfor %}
+    <!-- Header with lines -->
+    <div class="header-container" style="display: flex; flex-direction: column; align-items: center;">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 30px; width: 100%;">
+            <img src="{% static 'line.png' %}" alt="Line left" height="130px" width=auto>
+            <h1 class="page-title">Про нас</h1>
+            <img src="{% static 'line.png' %}" alt="Line right" height="130px" width=auto>
+        </div>
+       <div style= "margin-left: auto; margin-right: auto; width: 50%;">
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+           <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+            <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+</div>
         </div>
     </div>
 </body>

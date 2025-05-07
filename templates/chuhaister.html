@@ -1,0 +1,505 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ creature.name }} | Вікі істот</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(#fce8e0, #d3e6f2);
+            font-size: 16px;
+            font-family: Podkova, serif;
+        }
+
+        .hero {
+            background-image: url('{% static "background.png" %}');
+            background-size: cover;
+            background-position: center;
+            height: 761px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        nav {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: flex-start;
+            padding: 0 40px;
+            align-items: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            margin-left: 550px;
+            gap: 60px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #777552;
+            font-size: 1.1em;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #000000;
+        }
+        
+        .nav-links a:first-child {
+            color: #000000 !important;
+        }
+
+        .nav-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-family: Monomakh;
+            font-weight: 400;
+            font-size: 1.8em;
+            color: #000000;
+        }
+        
+        .mini-search {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            overflow: hidden;
+            background-color: rgba(255, 249.86, 152.29, 0.40);
+            height: 35px;
+            padding: 0 10px;
+        }
+
+        .mini-search input {
+            border: none;
+            padding: 0 15px;
+            font-size: 1em;
+            outline: none;
+            height: 100%;
+            background: transparent;
+            width: 120px;
+            margin: 0;
+            line-height: 35px;
+        }
+
+        .mini-search button {
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 0 5px;
+        }
+
+        .mini-search button img {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+        }
+
+        .login-btn {
+            text-decoration: none;
+            color: #000000;
+            font-size: 1.1em;
+            font-weight: 500;
+            padding: 0 20px;
+            border: 1.5px solid #000000;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            line-height: 1;
+            margin-left: 15px;
+        }
+
+        .login-btn:hover {
+            background-color: #000000;
+            color: white;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            padding-top: 80px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 500px;
+            height: 60px;
+            background-color: rgba(110, 108, 168, 0.50);
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 0 25px;
+            font-size: 1.1em;
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: #000000;
+            font-family: Podkova, serif;
+        }
+
+        .search-box button {
+            font-family: Podkova, serif;
+            position: absolute;
+            right: 7px;
+            top: 7px;
+            bottom: 7px;
+            width: 100px;
+            border: none;
+            border-radius: 25px;
+            background-color: #FDC5B9;
+            color: #000000;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.2s ease;
+            z-index: 1;
+        }
+
+        .search-box button:active {
+            transform: scale(0.96);
+        }
+
+        .search-box button:before,
+        .search-box button:after {
+            position: absolute;
+            content: "";
+            width: 150%;
+            left: 50%;
+            height: 100%;
+            transform: translateX(-50%);
+            z-index: -1000;
+            background-repeat: no-repeat;
+        }
+
+        .search-box button:hover:before {
+            top: -70%;
+            background-image: radial-gradient(circle, #ffcd5f 20%, transparent 20%),
+                radial-gradient(circle, transparent 20%, #ff9661 20%, transparent 30%),
+                radial-gradient(circle, #ff9661 20%, transparent 20%),
+                radial-gradient(circle, #ffcd5f 20%, transparent 20%),
+                radial-gradient(circle, transparent 10%, #ff9661 15%, transparent 20%),
+                radial-gradient(circle, #ff9661 20%, transparent 20%),
+                radial-gradient(circle, #ffcd5f 20%, transparent 20%),
+                radial-gradient(circle, #ff9661 20%, transparent 20%),
+                radial-gradient(circle, #ffcd5f 20%, transparent 20%);
+            background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%,
+                10% 10%, 18% 18%;
+            background-position: 50% 120%;
+            animation: greentopBubbles 0.6s ease;
+        }
+
+        @keyframes greentopBubbles {
+            0% {
+                background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%,
+                    40% 90%, 55% 90%, 70% 90%;
+            }
+            50% {
+                background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%,
+                    50% 50%, 65% 20%, 90% 30%;
+            }
+            100% {
+                background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%,
+                    50% 40%, 65% 10%, 90% 20%;
+                background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+            }
+        }
+
+        .search-box button:hover::after {
+            bottom: -70%;
+            background-image: radial-gradient(circle, #ffcd5f 20%, transparent 20%),
+                radial-gradient(circle, #ff9661 20%, transparent 20%),
+                radial-gradient(circle, transparent 10%, #ff9661 15%, transparent 20%),
+                radial-gradient(circle, #ff9661 20%, transparent 20%),
+                radial-gradient(circle, #ff9661 20%, transparent 20%),
+                radial-gradient(circle, #ff9661 20%, transparent 20%),
+                radial-gradient(circle, #ff9661 20%, transparent 20%);
+            background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 20% 20%, 18% 18%;
+            background-position: 50% 0%;
+            animation: greenbottomBubbles 0.6s ease;
+        }
+
+        @keyframes greenbottomBubbles {
+            0% {
+                background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%,
+                    70% -10%, 70% 0%;
+            }
+            50% {
+                background-position: 0% 80%, 20% 80%, 45% 60%, 60% 100%, 75% 70%, 95% 60%,
+                    105% 0%;
+            }
+            100% {
+                background-position: 0% 90%, 20% 90%, 45% 70%, 60% 110%, 75% 80%, 95% 70%,
+                    110% 10%;
+                background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+            }
+        }
+
+       .main-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+}
+
+.sidebar {
+    width: 200px;
+    height: 400px; /* Фіксована висота для скрола */
+    padding-right: 20px;
+    border-right: 2px solid #d2d2d2;
+    overflow-y: auto; /* Додаємо вертикальний скрол */
+}
+
+.sidebar-content {
+    padding: 10px;
+}
+
+.sidebar h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.sidebar h4 {
+    font-size: 1em;
+    margin: 10px 0 5px 0;
+    color: #555;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    margin-bottom: 8px;
+    font-size: 0.9em;
+    padding: 5px 0;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.sidebar li:hover {
+    color: #c36;
+}
+
+/* Стилі для скролбару */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+       .content {
+    flex: 1;
+    padding: 0 30px;
+    max-width: calc(100% - 300px); /* Щоб враховувалась ширина сайдбара */
+    box-sizing: border-box;
+}
+
+        .tabs {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 5px;
+        }
+
+        .tabs div {
+            padding: 5px 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .tabs .active {
+            border-bottom: 3px solid #c36;
+            color: #c36;
+            margin-bottom: -7px;
+        }
+
+        h1 {
+            font-family: 'TT Alientz Serif', serif;
+            font-size: 2em;
+            border-bottom: 1px solid #aaa;
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-weight: 1;
+        }
+
+        h2 {
+            font-size: 1.3em;
+            margin-top: 25px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .right-sidebar {
+    position: absolute;
+    top: 300px;
+    right: 30px;
+    width: 280px;
+    padding-left: 20px;
+}
+
+
+        .consectetur-card {
+            background-color: #e6f0e9;
+            border-radius: 24px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .consectetur-card img {
+            width: 100%;
+            border-radius: 16px;
+            margin-bottom: 15px;
+        }
+
+        .consectetur-list {
+             margin-top: 4px;
+    margin-bottom: 2px;
+    line-height: 1;
+            text-align: left;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+<header>
+  <nav>
+        <div class="logo">OBRIY</div>
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Головна</a>
+            <a href="{% url 'creature_list' %}">Усі істоти</a>
+            <a href="{% url 'usage' %}">Умови використання</a>
+            <a href="{% url 'about_us' %}">Про нас</a>
+        </div>
+        <div class="nav-right">
+            <form method="get" action="{% url 'home' %}" class="mini-search">
+                <input type="text" name="q" placeholder="" value="{{ query|default:'' }}">
+                <button type="submit">
+                    <img src="{% static 'search.svg' %}" alt="Search" width="24" height="24">
+                </button>
+            </form>
+            <a href="{% url 'chuhaister' 1 %}" class="login-btn">Увійти</a>
+        </div>
+    </nav>
+</header>
+<div class="search-container">
+    <form method="get" action="{% url 'home' %}" class="search-box">
+        <input type="text" name="q" placeholder="Ваш запит" value="{{ query|default:'' }}">
+        <button type="submit">Шукати</button>
+    </form>
+</div>
+
+<div class="main-container">
+    <div class="sidebar">
+        <h3>3MICT</h3>
+        <ul>
+            <li><strong>Зовнішність</strong></li>
+            <li><strong>Поведінка</strong></li>
+            <li><strong>Роль у міфології</strong></li>
+            <li><strong>Символи</strong></li>
+            <li><strong>Взаємодія</strong></li>
+            <li><strong>Джерела</strong></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <h1> {{ creature.name }} </h1>
+        <div class="tabs">
+            Cтаття
+            <div class="active"><a href="{% url 'home' %}">Читати</a></div>
+            {% if creature.id %}
+            <a href="{% url 'edit_creature' creature.id %}">Редагувати</a>
+        {% endif %}
+
+            <div><a href="{% url 'creature_history' 1 %}">Переглянути історію</a></div>
+        </div>
+         <h2>Зовнішність</h2>
+        <p>{{ creature.appearance }}</p>
+
+        <h2>Поведінка</h2>
+        <p>{{ creature.behavior }}</p>
+
+        <h2>Роль у міфології</h2>
+        <p>{{ creature.role_in_mythology }}</p>
+
+        {% if creature.symbols %}
+            <h2>Символи</h2>
+            <ul>
+                {% for symbol in creature.symbols %}
+                    <li>{{ symbol }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <h2>Взаємодія</h2>
+        <p>{{ creature.description }}</p>
+
+        <h2>Джерела</h2>
+        <p>{{ creature.sources }}</p>
+    </div>
+    </div>
+  <div class="right-sidebar">
+        <div class="consectetur-card">
+            <img src="{{ creature.image_url }}" alt="{{ creature.name }}">
+            <div class="consectetur-list">
+                <p><strong>Тип:</strong> {{ creature.get_type_display }}</p>
+                <p><strong>Регіон:</strong> {{ creature.region }}</p>
+                <p><strong>Створено:</strong> {{ creature.created_at|date:"d.m.Y" }}</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
