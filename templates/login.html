@@ -36,6 +36,7 @@
             align-items: center;
             text-align: center;
             padding: 2rem;
+            color: black;
         }
 
         .hero h1 {
@@ -43,8 +44,7 @@
             font-size: 48px;
             font-weight: 400;
             color: #000000;
-            margin-top: 110px;
-            margin-bottom: 50px;
+            margin-top: 40px;
             letter-spacing: 1px;
         }
 
@@ -285,73 +285,77 @@
  .login-block {
      margin-top: 100px;
      margin-bottom: 3px;
-        background-color: white;
+        background-color: rgba(110, 108, 168, 0.5);
         padding: 40px;
-        border-radius: 10px;
+        border-radius: 30px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         width: 100%;
      height: 400px;
-        max-width: 600px;
+        max-width: 550px;
         text-align: center;
+     color: black;
     }
     
     .login-title {
+        margin-bottom: 10px;
         font-size: 28px;
-        color: #333;
+        color: #000000;
     }
-    
-    .login-form {
-        margin-bottom: 20px;
-    }
-    
     .form-group {
         margin-bottom: 20px;
+        color: black;
     }
     
+        .login-input::placeholder {
+        color: #000000; /* Світло-сірий колір для плейсхолдера */
+        opacity: 1; /* Забезпечує повну видимість (необхідно для деяких браузерів) */
+        text-indent: 10px;
+}
+
+    
     .login-input {
-        width: 100%;
-        padding: 12px 15px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
+        background-color: rgba(110, 108, 168, 0.5);
+        width: 85%;
+        padding: 20px 15px;
+        border: 1px rgba(110, 108, 168, 0.5);
         font-size: 16px;
         box-sizing: border-box;
+        border-radius: 50px;
+        font-family: Podkova, serif;
+        color: #000000;
+        text-indent: 10px;
     }
     
     .login-input:focus {
         outline: none;
         border-color: #6e6ca8;
+        padding-left: 10px;
     }
-    
-    .divider {
-        height: 1px;
-        background-color: #eee;
-        margin: 25px 0;
-    }
-    
     .login-button {
-        width: 100%;
-        padding: 14px;
-        background-color: #6e6ca8;
-        color: white;
-        border: none;
-        border-radius: 5px;
+        width: 85%;
+        padding: 20px;
+        background-color: rgba(110, 108, 168, 0%);
+       border: 1.5px solid #000000;
+    border-radius: 30px;
         font-size: 16px;
         font-weight: bold;
         cursor: pointer;
         transition: background-color 0.3s;
+         font-family: Podkova, serif;
     }
     
     .login-button:hover {
-        background-color: #5a588f;
+        background-color: #000000;
+        color: aliceblue;
     }
     
     .register-link {
         margin-top: 20px;
-        color: #666;
+        color: #000000;
     }
     
     .register-link a {
-        color: #6e6ca8;
+        color: #5b1745;
         text-decoration: none;
     }
     
@@ -361,7 +365,6 @@
     </style>
 </head>
 <body>
-
     <nav>
         <div class="logo">OBRIY</div>
         <div class="nav-links">
@@ -371,37 +374,82 @@
             <a href="{% url 'about_us' %}">Про нас</a>
         </div>
         <div class="nav-right">
-    <form method="get" action="{% url 'home' %}" class="mini-search">
-        <input type="text" name="q" placeholder="" value="{{ query|default:'' }}">
-        <button type="submit">
-            <img src="{% static 'search.svg' %}" alt="Search" width="24" height="24">
-        </button>
-    </form>
-   <a href="{% url 'login' %}" class="login-btn">Увійти</a>
-</div>
+            <form method="get" action="{% url 'home' %}" class="mini-search">
+                <input type="text" name="q" placeholder="Пошук..." value="{{ query|default:'' }}">
+                <button type="submit">
+                    <img src="{% static 'search.svg' %}" alt="Search" width="24" height="24">
+                </button>
+            </form>
+            {% if user.is_authenticated %}
+                <div class="user-dropdown">
+                    <button class="login-btn">
+                        <i class="bi bi-person-circle"></i> {{ user.username }}
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="{% if user.is_superuser %}{% url 'admin_dashboard' %}{% else %}{% url 'user_profile' %}{% endif %}">
+                            {% if user.is_superuser %}Адмін-панель{% else %}Мій профіль{% endif %}
+                        </a>
+                        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-btn">
+                                <i class="bi bi-box-arrow-right"></i> Вийти
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}" class="login-btn">
+                    <i class="bi bi-box-arrow-in-right"></i> Увійти
+                </a>
+            {% endif %}
+        </div>
     </nav>
 
     <div class="hero">
-        <div class="login-block">
-    <h1 class="login-title">ВХІД</h1>
-        <div class="form-group">
-            <input type="text" placeholder="Ваш логін" class="login-input">
-        </div>
+    <div class="login-block">
+        <h1 class="login-title">ВХІД</h1>
         
-        <div class="form-group">
-            <input type="password" placeholder="Ваш пароль" class="login-input">
-        </div>
-    
-    <div class="divider"></div>
-    
-    <button class="login-button"><a href="{% url 'user_profile' %}">Увійти</a></button>
-    
-    <div class="register-link">
-        Не маєте облікового запису? <a href="#">Реєстрація</a>
+        {% if user.is_authenticated %}
+            <div class="already-logged">
+                <p>Ви вже авторизовані як <strong>{{ user.username }}</strong>.</p>
+                <a href="{% if user.is_superuser %}{% url 'admin_dashboard' %}{% else %}{% url 'user_profile' %}{% endif %}" 
+                   class="redirect-btn">
+                    Перейти до {% if user.is_superuser %}адмін-панелі{% else %}профілю{% endif %}
+                </a>
+                <form action="{% url 'logout' %}" method="post" class="logout-form">
+                    {% csrf_token %}
+                    <p class="logout-link">Або <button type="submit" class="logout-text-btn">вийти</button> з системи</p>
+                </form>
+            </div>
+        {% else %}
+            {% if error_message %}
+                <div class="error-message">
+                    <i class="bi bi-exclamation-triangle"></i> {{ error_message }}
+                </div>
+            {% endif %}
+            
+            <form method="post" action="{% url 'login' %}" class="auth-form">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+                
+                <div class="form-group">
+                    <input type="text" id="username" name="username" placeholder="Ваш логін" class="login-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="password" id="password" name="password" placeholder="Ваш пароль" class="login-input" required>
+                </div>
+                
+                <button type="submit" class="login-button">
+                    <i class="bi bi-box-arrow-in-right"></i> Увійти
+                </button>
+                
+                <div class="register-link">
+                    Не маєте облікового запису? <a href="{% url 'register' %}">Зареєструватися</a>
+                </div>
+            </form>
+        {% endif %}
     </div>
 </div>
-        </form>
-    </div>
-
 </body>
 </html>

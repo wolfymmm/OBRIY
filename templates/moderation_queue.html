@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чернетки на модерацію</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding: 20px; background-color: #f8f9fa; }
+        .table-container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
+        h1 { margin-bottom: 30px; }
+        .btn-sm { padding: 0.25rem 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <h1>Чернетки на модерацію</h1>
+        
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Назва</th>
+                    <th>Автор</th>
+                    <th>Дата</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for draft in drafts %}
+                <tr>
+                    <td>{{ draft.name }}</td>
+                    <td>{{ draft.author.username }}</td>
+                    <td>{{ draft.submitted_at|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        <a href="/moderation/approve/{{ draft.id }}/" class="btn btn-success btn-sm">Затвердити</a>
+                        <a href="/moderation/reject/{{ draft.id }}/" class="btn btn-danger btn-sm">Відхилити</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">Немає чернеток для модерації</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+<script>
+// Додаємо спеціальний клас до body для суперкористувача
+if (document.cookie.includes('superuser=true')) {
+    document.body.classList.add('is-superuser');
+}
+</script>
+</body>
+</html>
