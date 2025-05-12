@@ -8,11 +8,33 @@ from django.urls import reverse_lazy
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
-
-from .models import Creature, CreatureHistory, CreatureDraft, AdminActionLog, CreatureDraft
+from django.views import View
+from .models import Creature, CreatureHistory, CreatureDraft, AdminActionLog
 from .forms import CreatureForm, CreatureDraftForm
+from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
+def edit_creature(request, creature_id):
+    creature = get_object_or_404(Creature, id=creature_id)  # Отримуємо істоту тут
+
+    if not request.user.is_authenticated:
+        return render(request, 'edit_auth_required.html', {
+            'creature': creature  # Передаємо об'єкт істоти у шаблон
+        })
+
+    if request.method == 'POST':
+        form = CreatureForm(request.POST, instance=creature)
+        if form.is_valid():
+            form.save()
+            return redirect('chuhaister', creature_id=creature.id)
+    else:
+        form = CreatureForm(instance=creature)
+
+    return render(request, 'edit_creature.html', {
+        'form': form,
+        'creature': creature
+    })
 @login_required
 def create_creature_draft(request):
     if request.method == 'POST':
@@ -125,48 +147,9 @@ def reject_draft(request, draft_id):
 
     return render(request, 'reject_draft.html', {'draft': draft})
 
-
-@login_required
-def create_creature_draft(request):
-    """Створення нової чернетки статті"""
-    if request.method == 'POST':
-        form = CreatureDraftForm(request.POST)
-        if form.is_valid():
-            draft = form.save(commit=False)
-            draft.author = request.user
-            draft.save()
-            return redirect('draft_submitted')
-    else:
-        form = CreatureDraftForm()
-
-    return render(request, 'create_draft.html', {'form': form})
-
-
 def draft_submitted(request):
     """Підтвердження відправки чернетки"""
     return render(request, 'draft_submitted.html')
-
-
-@login_required
-def edit_creature(request, creature_id):
-    """Редагування існуючої статті"""
-    creature = get_object_or_404(Creature, id=creature_id)
-
-    if request.method == 'POST':
-        form = CreatureForm(request.POST, instance=creature)
-        if form.is_valid():
-            CreatureHistory.objects.create(
-                creature=creature,
-                **{f.name: getattr(creature, f.name) for f in creature._meta.fields
-                   if f.name not in ['id', 'creature_ptr']}
-            )
-            form.save()
-            return redirect('chuhaister', creature_id=creature.id)
-    else:
-        form = CreatureForm(instance=creature)
-
-    return render(request, 'edit_creature.html', {'form': form, 'creature': creature})
-
 
 def creature_history(request, creature_id):
     """Історія змін статті"""

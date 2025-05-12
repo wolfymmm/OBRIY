@@ -12,7 +12,8 @@
             font-size: 16px;
             font-family: Podkova, serif;
         }
- .hero {
+        
+        .hero {
             background-image: url('{% static "background.png" %}');
             background-size: cover;
             background-position: center;
@@ -135,134 +136,6 @@
             color: white;
         }
 
-        .search-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100px;
-            padding-top: 80px;
-        }
-
-        .search-box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 500px;
-            height: 60px;
-            background-color: rgba(110, 108, 168, 0.50);
-            border-radius: 30px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .search-box input {
-            flex: 1;
-            padding: 0 25px;
-            font-size: 1.1em;
-            border: none;
-            outline: none;
-            background-color: transparent;
-            color: #000000;
-            font-family: Podkova, serif;
-        }
-
-        .search-box button {
-            font-family: Podkova, serif;
-            position: absolute;
-            right: 7px;
-            top: 7px;
-            bottom: 7px;
-            width: 100px;
-            border: none;
-            border-radius: 25px;
-            background-color: #FDC5B9;
-            color: #000000;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1em;
-            transition: all 0.2s ease;
-            z-index: 1;
-        }
-
-        .search-box button:active {
-            transform: scale(0.96);
-        }
-
-        .search-box button:before,
-        .search-box button:after {
-            position: absolute;
-            content: "";
-            width: 150%;
-            left: 50%;
-            height: 100%;
-            transform: translateX(-50%);
-            z-index: -1000;
-            background-repeat: no-repeat;
-        }
-
-        .search-box button:hover:before {
-            top: -70%;
-            background-image: radial-gradient(circle, #ffcd5f 20%, transparent 20%),
-                radial-gradient(circle, transparent 20%, #ff9661 20%, transparent 30%),
-                radial-gradient(circle, #ff9661 20%, transparent 20%),
-                radial-gradient(circle, #ffcd5f 20%, transparent 20%),
-                radial-gradient(circle, transparent 10%, #ff9661 15%, transparent 20%),
-                radial-gradient(circle, #ff9661 20%, transparent 20%),
-                radial-gradient(circle, #ffcd5f 20%, transparent 20%),
-                radial-gradient(circle, #ff9661 20%, transparent 20%),
-                radial-gradient(circle, #ffcd5f 20%, transparent 20%);
-            background-size: 10% 10%, 20% 20%, 15% 15%, 20% 20%, 18% 18%, 10% 10%, 15% 15%,
-                10% 10%, 18% 18%;
-            background-position: 50% 120%;
-            animation: greentopBubbles 0.6s ease;
-        }
-
-        @keyframes greentopBubbles {
-            0% {
-                background-position: 5% 90%, 10% 90%, 10% 90%, 15% 90%, 25% 90%, 25% 90%,
-                    40% 90%, 55% 90%, 70% 90%;
-            }
-            50% {
-                background-position: 0% 80%, 0% 20%, 10% 40%, 20% 0%, 30% 30%, 22% 50%,
-                    50% 50%, 65% 20%, 90% 30%;
-            }
-            100% {
-                background-position: 0% 70%, 0% 10%, 10% 30%, 20% -10%, 30% 20%, 22% 40%,
-                    50% 40%, 65% 10%, 90% 20%;
-                background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
-            }
-        }
-
-        .search-box button:hover::after {
-            bottom: -70%;
-            background-image: radial-gradient(circle, #ffcd5f 20%, transparent 20%),
-                radial-gradient(circle, #ff9661 20%, transparent 20%),
-                radial-gradient(circle, transparent 10%, #ff9661 15%, transparent 20%),
-                radial-gradient(circle, #ff9661 20%, transparent 20%),
-                radial-gradient(circle, #ff9661 20%, transparent 20%),
-                radial-gradient(circle, #ff9661 20%, transparent 20%),
-                radial-gradient(circle, #ff9661 20%, transparent 20%);
-            background-size: 15% 15%, 20% 20%, 18% 18%, 20% 20%, 15% 15%, 20% 20%, 18% 18%;
-            background-position: 50% 0%;
-            animation: greenbottomBubbles 0.6s ease;
-        }
-
-        @keyframes greenbottomBubbles {
-            0% {
-                background-position: 10% -10%, 30% 10%, 55% -10%, 70% -10%, 85% -10%,
-                    70% -10%, 70% 0%;
-            }
-            50% {
-                background-position: 0% 80%, 20% 80%, 45% 60%, 60% 100%, 75% 70%, 95% 60%,
-                    105% 0%;
-            }
-            100% {
-                background-position: 0% 90%, 20% 90%, 45% 70%, 60% 110%, 75% 80%, 95% 70%,
-                    110% 10%;
-                background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
-            }
-        }
-
         .main-container {
             max-width: 1200px;
             margin: 20px auto;
@@ -290,7 +163,8 @@
         }
 
         .form-group input[type="text"],
-        .form-group textarea {
+        .form-group textarea,
+        .form-group select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -304,6 +178,10 @@
             resize: vertical;
         }
 
+        .symbols-container {
+            margin-bottom: 10px;
+        }
+
         .symbols-input {
             display: flex;
             align-items: center;
@@ -315,7 +193,7 @@
             margin-right: 10px;
         }
 
-        .symbols-input button {
+        .remove-symbol {
             background-color: #f44336;
             color: white;
             border: none;
@@ -351,6 +229,9 @@
             transition: all 0.3s;
             border: none;
             font-size: 1em;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
 
         .btn-save {
@@ -366,6 +247,10 @@
         .btn:hover {
             opacity: 0.9;
             transform: translateY(-2px);
+        }
+        
+        .current-image {
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -392,38 +277,61 @@
 </header>
 
 <div class="main-container">
-  <form method="post" class="edit-form">
+  <form method="post" class="edit-form" enctype="multipart/form-data">
     {% csrf_token %}
     <h1>Редагування істоти: {{ form.instance.name }}</h1>
 
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+        {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+                <li>{{ field|title }}: {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
     <div class="form-group">
-      {{ form.name.label_tag }} {{ form.name }}
+      <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+      {{ form.name }}
     </div>
 
     <div class="form-group">
-      {{ form.type.label_tag }} {{ form.type }}
+      <label for="{{ form.type.id_for_label }}">{{ form.type.label }}</label>
+      {{ form.type }}
     </div>
 
     <div class="form-group">
-      {{ form.region.label_tag }} {{ form.region }}
+      <label for="{{ form.region.id_for_label }}">{{ form.region.label }}</label>
+      {{ form.region }}
     </div>
 
     <div class="form-group">
-      {{ form.appearance.label_tag }} {{ form.appearance }}
+      <label for="{{ form.appearance.id_for_label }}">{{ form.appearance.label }}</label>
+      {{ form.appearance }}
     </div>
 
     <div class="form-group">
-      {{ form.behavior.label_tag }} {{ form.behavior }}
+      <label for="{{ form.behavior.id_for_label }}">{{ form.behavior.label }}</label>
+      {{ form.behavior }}
     </div>
 
     <div class="form-group">
-      {{ form.role_in_mythology.label_tag }} {{ form.role_in_mythology }}
+      <label for="{{ form.role_in_mythology.id_for_label }}">{{ form.role_in_mythology.label }}</label>
+      {{ form.role_in_mythology }}
     </div>
 
     <div class="form-group">
       <label for="symbols">Символи:</label>
-      <div id="symbols-container">
-        {% for symbol in form.initial.symbols %}
+      <div id="symbols-container" class="symbols-container">
+        {% for symbol in form.instance.symbols %}
+        <div class="symbols-input">
+          <input type="text" name="symbols" value="{{ symbol }}">
+          <button type="button" class="remove-symbol">Видалити</button>
+        </div>
+        {% empty %}
         <div class="symbols-input">
           <input type="text" name="symbols">
           <button type="button" class="remove-symbol">Видалити</button>
@@ -434,17 +342,20 @@
     </div>
 
     <div class="form-group">
-      {{ form.description.label_tag }} {{ form.description }}
+      <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+      {{ form.description }}
     </div>
 
     <div class="form-group">
-      {{ form.sources.label_tag }} {{ form.sources }}
+      <label for="{{ form.sources.id_for_label }}">{{ form.sources.label }}</label>
+      {{ form.sources }}
     </div>
 
     <div class="form-group">
-      {{ form.image_url.label_tag }} {{ form.image_url }}
+      <label for="{{ form.image_url.id_for_label }}">{{ form.image_url.label }}</label>
+      {{ form.image_url }}
       {% if form.instance.image_url %}
-        <p>Поточне зображення: <a href="{{ form.instance.image_url }}" target="_blank">Переглянути</a></p>
+        <p class="current-image">Поточне зображення: <a href="{{ form.instance.image_url }}" target="_blank">Переглянути</a></p>
       {% endif %}
     </div>
 
@@ -456,23 +367,26 @@
 </div>
 
 <script>
-  document.getElementById('add-symbol').addEventListener('click', function () {
-    const container = document.getElementById('symbols-container');
-    const div = document.createElement('div');
-    div.className = 'symbols-input';
-    div.innerHTML = `
-      <input type="text" name="symbols">
-      <button type="button" class="remove-symbol">Видалити</button>
-    `;
-    container.appendChild(div);
-  });
+  document.addEventListener('DOMContentLoaded', function() {
+    // Додавання нового поля для символу
+    document.getElementById('add-symbol').addEventListener('click', function() {
+      const container = document.getElementById('symbols-container');
+      const div = document.createElement('div');
+      div.className = 'symbols-input';
+      div.innerHTML = `
+        <input type="text" name="symbols">
+        <button type="button" class="remove-symbol">Видалити</button>
+      `;
+      container.appendChild(div);
+    });
 
-  document.addEventListener('click', function (e) {
-    if (e.target && e.target.classList.contains('remove-symbol')) {
-      e.target.parentElement.remove();
-    }
+    // Видалення поля символу
+    document.addEventListener('click', function(e) {
+      if (e.target && e.target.classList.contains('remove-symbol')) {
+        e.target.parentElement.remove();
+      }
+    });
   });
 </script>
 </body>
-
 </html>

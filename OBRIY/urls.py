@@ -24,6 +24,11 @@ urlpatterns = [
     path('dashboard/', admin_dashboard, name='admin_dashboard'),
     path('profile/', user_profile, name='user_profile'),
 
+    # ... інші URL ...
+    path('accounts/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
+    # ... інші URL ...
+
     # Чернетки
     path('creature/create/', create_creature_draft, name='create_draft'),
     path('draft-submitted/', draft_submitted, name='draft_submitted'),
@@ -34,6 +39,7 @@ urlpatterns = [
     path('moderation/reject/<int:draft_id>/', reject_draft, name='reject_draft'),
 
     # Істоти
+
     path('creature/<int:creature_id>/', views.chuhaister, name='chuhaister'),
     path('creature/<int:creature_id>/edit/', views.edit_creature, name='edit_creature'),
     path('creature/<int:creature_id>/history/', views.creature_history, name='creature_history'),
