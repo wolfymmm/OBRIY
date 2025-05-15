@@ -98,6 +98,10 @@ class CreatureDraft(models.Model):
     admin_comment = models.TextField(blank=True, null=True, verbose_name="Коментар адміна")
     is_rejected = models.BooleanField(default=False, verbose_name="Відхилено")
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.creature = None
+
     def __str__(self):
         return f"{self.name} (чернетка)"
 

@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'wiki.plugins.macros.apps.MacrosConfig',
     'django.contrib.postgres',
     'creature',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
