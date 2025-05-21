@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Реєстрація користувача</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background: linear-gradient(to right, #c9d6ff, #e2e2e2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .register-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #444;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #357bd8;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #555;
+        }
+
+        .login-link a {
+            color: #4a90e2;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .file-upload {
+            margin-top: 1rem;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .preview-image {
+            max-width: 100px;
+            max-height: 100px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h2>Реєстрація користувача</h2>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Ім'я користувача -->
+            <div class="form-group">
+                <label for="username">Ім'я користувача:</label>
+                <input type="text" id="username" name="username" required>
+                {% if form.username.errors %}
+                    <div class="error-message">{{ form.username.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Ім'я -->
+            <div class="form-group">
+                <label for="name">Ім'я:</label>
+                <input type="text" id="name" name="name" required>
+                {% if form.name.errors %}
+                    <div class="error-message">{{ form.name.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Прізвище -->
+            <div class="form-group">
+                <label for="surname">Прізвище:</label>
+                <input type="text" id="surname" name="surname" required>
+                {% if form.surname.errors %}
+                    <div class="error-message">{{ form.surname.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                {% if form.email.errors %}
+                    <div class="error-message">{{ form.email.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Пароль -->
+            <div class="form-group">
+                <label for="password1">Пароль:</label>
+                <input type="password" id="password1" name="password1" required>
+                {% if form.password1.errors %}
+                    <div class="error-message">{{ form.password1.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Підтвердження пароля -->
+            <div class="form-group">
+                <label for="password2">Підтвердження пароля:</label>
+                <input type="password" id="password2" name="password2" required>
+                {% if form.password2.errors %}
+                    <div class="error-message">{{ form.password2.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Роль -->
+            <div class="form-group">
+                <label for="role">Роль:</label>
+                <select id="role" name="role" r>
+                    {% for role in form.role.field.queryset %}
+                        <option value="{{ role.id }}">{{ role.name }}</option>
+                    {% endfor %}
+                </select>
+                {% if form.role.errors %}
+                    <div class="error-message">{{ form.role.errors }}</div>
+                {% endif %}
+            </div>
+
+            <!-- Фото профілю -->
+            <div class="form-group">
+                <label>Фото профілю:</label>
+                <div class="file-upload">
+                    <label class="file-upload-label" for="profile_picture">
+                        Виберіть файл...
+                    </label>
+                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*" style="display: none;">
+                    <img id="preview" class="preview-image" alt="Попередній перегляд">
+                </div>
+                {% if form.profile_picture.errors %}
+                    <div class="error-message">{{ form.profile_picture.errors }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit">Зареєструватись</button>
+        </form>
+
+        <div class="login-link">
+            Вже маєте акаунт? <a href="{% url 'login' %}">Увійти</a>
+        </div>
+    </div>
+
+    <script>
+        // Попередній перегляд зображення
+        document.getElementById('profile_picture').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('preview');
+            const label = document.querySelector('.file-upload-label');
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    label.textContent = file.name;
+                }
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+                label.textContent = 'Виберіть файл...';
+            }
+        });
+    </script>
+</body>
+</html>

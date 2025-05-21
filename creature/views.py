@@ -8,11 +8,15 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
 from django.views import View
-from .models import Creature, CreatureHistory, CreatureDraft, AdminActionLog
-from .forms import CreatureForm, CreatureDraftForm
+from .models import Creature, CreatureDraft, AdminActionLog
+from django.contrib.auth.hashers import make_password
+from .forms import CreatureForm, CreatureDraftForm, RegisterForm
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.admin.views.decorators import staff_member_required
+from django.core.files.storage import FileSystemStorage
+import os
+from django.conf import settings
 
 
 
@@ -237,9 +241,35 @@ def chuhaister(request, creature_id):
 
 
 # Авторизація
-def register_view(request):
-    return render(request, 'register.html')
 
+
+def register_view(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                user = form.save(commit=False)
+
+                # Обробка зображення профілю
+                if 'profile_picture' in request.FILES:
+                    profile_pic = request.FILES['profile_picture']
+                    fs = FileSystemStorage()
+                    filename = fs.save(f'profile_pics/{user.username}_{profile_pic.name}', profile_pic)
+                    user.profile_picture_url = os.path.join(settings.MEDIA_URL, filename)
+
+                user.save()
+                messages.success(request, 'Реєстрація успішна! Тепер увійдіть.')
+                return redirect('login')
+            except Exception as e:
+                messages.error(request, f'Сталася помилка: {str(e)}')
+    else:
+        try:
+            form = RegisterForm()
+        except Exception as e:
+            messages.error(request, f'Помилка при завантаженні форми: {str(e)}')
+            form = None
+
+    return render(request, 'register.html', {'form': form})
 
 @login_required
 def user_profile(request):

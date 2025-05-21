@@ -66,6 +66,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'OBRIY.urls'
 
+AUTH_USER_MODEL = 'creature.User'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -156,4 +158,6 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
 
