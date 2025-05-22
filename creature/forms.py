@@ -1,9 +1,12 @@
 from django import forms
+from django.core.files.storage.filesystem import FileSystemStorage
+
 from .models import Creature
 from .models import CreatureDraft
-from .models import User
 from django.contrib.auth.forms import UserCreationForm
 from .models import Role
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 
@@ -61,24 +64,15 @@ class RegisterForm(UserCreationForm):
     name = forms.CharField(max_length=100, required=True, label="Ім'я")
     surname = forms.CharField(max_length=100, required=True, label="Прізвище")
     email = forms.EmailField(required=True, label="Email")
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Використовуємо .all() з ітератором для уникнення проблем з курсором
-        self.fields['role'] = forms.ModelChoiceField(
-            queryset=Role.objects.all().iterator(),
-            required=True,
-            label="Роль"
-        )
-
-    profile_picture = forms.ImageField(
-        required=False,
-        label="Фото профілю"
-    )
+    profile_picture = forms.ImageField(required=False, label="Фото профілю")
 
     class Meta:
         model = User
         fields = ['username', 'name', 'surname', 'email', 'password1', 'password2', 'role', 'profile_picture']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['role'].queryset = Role.objects.all()
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -87,6 +81,14 @@ class RegisterForm(UserCreationForm):
         user.email = self.cleaned_data['email']
         user.role = self.cleaned_data['role']
 
+        # Обробка зображення
+        if 'profile_picture' in self.files:
+            profile_pic = self.files['profile_picture']
+            fs = FileSystemStorage()
+            filename = fs.save(f'profile_pics/{user.username}_{profile_pic.name}', profile_pic)
+            user.profile_picture_url = fs.url(filename)
+
         if commit:
             user.save()
+            self.save_m2m()  # Важливо для ManyToMany полів
         return user

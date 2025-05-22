@@ -129,6 +129,11 @@ class User(AbstractUser):
 
             REQUIRED_FIELDS = ['email', 'name', 'surname']
 
+            class Meta:
+                db_table = 'creature_user'  # Підтверджуємо існуюче ім'я таблиці
+                verbose_name = 'User'
+                verbose_name_plural = 'Users'
+
     # Цей метод вже є у всіх моделях Django за замовчуванням для полів з choices
     # def get_action_display(self):
     #     return dict(self.ACTION_CHOICES).get(self.action, self.action)

@@ -248,26 +248,17 @@ def register_view(request):
         form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
             try:
-                user = form.save(commit=False)
-
-                # Обробка зображення профілю
-                if 'profile_picture' in request.FILES:
-                    profile_pic = request.FILES['profile_picture']
-                    fs = FileSystemStorage()
-                    filename = fs.save(f'profile_pics/{user.username}_{profile_pic.name}', profile_pic)
-                    user.profile_picture_url = os.path.join(settings.MEDIA_URL, filename)
-
-                user.save()
-                messages.success(request, 'Реєстрація успішна! Тепер увійдіть.')
-                return redirect('login')
+                user = form.save()
+                login(request, user)  # Автоматичний вхід після реєстрації
+                messages.success(request, 'Реєстрація успішна!')
+                return redirect('home')
             except Exception as e:
-                messages.error(request, f'Сталася помилка: {str(e)}')
+                messages.error(request, f'Помилка реєстрації: {str(e)}')
+                logger.error(f"Registration error: {str(e)}")
+        else:
+            messages.error(request, 'Будь ласка, виправте помилки у формі')
     else:
-        try:
-            form = RegisterForm()
-        except Exception as e:
-            messages.error(request, f'Помилка при завантаженні форми: {str(e)}')
-            form = None
+        form = RegisterForm()
 
     return render(request, 'register.html', {'form': form})
 
