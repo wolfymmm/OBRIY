@@ -113,11 +113,17 @@ class AdminActionLog(models.Model):
             'delete': 'danger',
         }.get(self.action, 'secondary')
 
-class Role(models.Model):
-        name = models.CharField(max_length=50)
 
-        def __str__(self):
-            return self.name
+class Role(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        db_table = 'creature_role'  # Явно вказуємо ім'я таблиці
+        verbose_name = 'Роль'
+        verbose_name_plural = 'Ролі'
+
+    def __str__(self):
+        return self.name
 
 class User(AbstractUser):
             name = models.CharField(max_length=100)
@@ -134,6 +140,3 @@ class User(AbstractUser):
                 verbose_name = 'User'
                 verbose_name_plural = 'Users'
 
-    # Цей метод вже є у всіх моделях Django за замовчуванням для полів з choices
-    # def get_action_display(self):
-    #     return dict(self.ACTION_CHOICES).get(self.action, self.action)

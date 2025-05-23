@@ -1,12 +1,6 @@
 from django import forms
-from django.core.files.storage.filesystem import FileSystemStorage
-
-from .models import Creature
-from .models import CreatureDraft
 from django.contrib.auth.forms import UserCreationForm
-from .models import Role
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from .models import User, Role, Creature, CreatureDraft
 
 
 
@@ -59,7 +53,6 @@ class CreatureForm(forms.ModelForm):
             return [s.strip() for s in data.split(',')]
         return []
 
-
 class RegisterForm(UserCreationForm):
     name = forms.CharField(max_length=100, required=True, label="Ім'я")
     surname = forms.CharField(max_length=100, required=True, label="Прізвище")
@@ -68,27 +61,17 @@ class RegisterForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'name', 'surname', 'email', 'password1', 'password2', 'role', 'profile_picture']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['role'].queryset = Role.objects.all()
+        fields = ['username', 'name', 'surname', 'email', 'password1', 'password2']
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.name = self.cleaned_data['name']
-        user.surname = self.cleaned_data['surname']
-        user.email = self.cleaned_data['email']
-        user.role = self.cleaned_data['role']
 
-        # Обробка зображення
-        if 'profile_picture' in self.files:
-            profile_pic = self.files['profile_picture']
-            fs = FileSystemStorage()
-            filename = fs.save(f'profile_pics/{user.username}_{profile_pic.name}', profile_pic)
-            user.profile_picture_url = fs.url(filename)
+        # Автоматичне призначення ролі "Редактор"
+        editor_role, created = Role.objects.get_or_create(name='Редактор')
+        user.role = editor_role
 
         if commit:
             user.save()
-            self.save_m2m()  # Важливо для ManyToMany полів
         return user
+
+    # Видаліть метод __init__ (він більше не потрібен)

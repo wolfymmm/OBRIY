@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import logout
 from django.urls import reverse_lazy
-from django.contrib.auth.models import User
+from creature.models import User
+from django.contrib.auth import login
 from django.utils import timezone
 from datetime import timedelta
 from django.views import View
@@ -17,7 +18,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.core.files.storage import FileSystemStorage
 import os
 from django.conf import settings
-
+import logging
+logger = logging.getLogger(__name__)
 
 
 # Функція для перевірки, чи є користувач адміністратором
@@ -167,13 +169,22 @@ def create_creature_draft(request):
 
 @staff_member_required
 def admin_dashboard(request):
-    """Адмін-панель для суперкористувачів"""
-    pending_count = CreatureDraft.objects.filter(is_approved=False, is_rejected=False).count()
+    """
+    Адмін-панель для персоналу
+    """
+    pending_count = CreatureDraft.objects.filter(
+        is_approved=False,
+        is_rejected=False
+    ).count()
+
     total_articles = Creature.objects.count()
     rejected_count = CreatureDraft.objects.filter(is_rejected=True).count()
-    users_count = User.objects.count()
 
-    recent_actions = AdminActionLog.objects.all().order_by('-timestamp')[:5]
+    # Використовуємо вашу кастомну модель User
+    users_count = User.objects.filter(is_active=True).count()
+
+    recent_actions = AdminActionLog.objects.select_related('user') \
+                         .order_by('-timestamp')[:5]
 
     context = {
         'pending_count': pending_count,
@@ -182,8 +193,8 @@ def admin_dashboard(request):
         'users_count': users_count,
         'recent_actions': recent_actions,
     }
-    return render(request, 'admin_dashboard.html', context)
 
+    return render(request, 'admin_dashboard.html', context)
 
 @staff_member_required
 def moderation_queue(request):
@@ -247,20 +258,13 @@ def register_view(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST, request.FILES)
         if form.is_valid():
-            try:
-                user = form.save()
-                login(request, user)  # Автоматичний вхід після реєстрації
-                messages.success(request, 'Реєстрація успішна!')
-                return redirect('home')
-            except Exception as e:
-                messages.error(request, f'Помилка реєстрації: {str(e)}')
-                logger.error(f"Registration error: {str(e)}")
-        else:
-            messages.error(request, 'Будь ласка, виправте помилки у формі')
+            user = form.save()
+            login(request, user)
+            return redirect('home')
     else:
         form = RegisterForm()
-
     return render(request, 'register.html', {'form': form})
+
 
 @login_required
 def user_profile(request):
