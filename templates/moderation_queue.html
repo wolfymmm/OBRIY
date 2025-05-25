@@ -1,54 +1,256 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Чернетки на модерацію</title>
+    <title>Чернетки на модерацію | OBRIY</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
-        body { padding: 20px; background-color: #f8f9fa; }
-        .table-container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
-        h1 { margin-bottom: 30px; }
-        .btn-sm { padding: 0.25rem 0.5rem; }
+        @font-face {
+            font-family: 'TT Alientz Serif';
+            src: url('{% static "TTAlientz-Serif.eot" %}');
+            src: local('TT Alientz Serif'), local('TTAlientz-Serif'),
+                url('{% static "TTAlientz-Serif.eot?#iefix" %}') format('embedded-opentype'),
+                url('{% static "TTAlientz-Serif.woff2" %}') format('woff2'),
+                url('{% static "TTAlientz-Serif.woff" %}') format('woff'),
+                url('{% static "TTAlientz-Serif.ttf" %}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(#fce8e0, #ead3ff);
+            font-size: 16px;
+            font-family: Podkova, serif;
+        }
+
+        .admin-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 40px;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .admin-logo {
+            font-family: Monomakh;
+            font-weight: 400;
+            font-size: 1.8em;
+            color: #000000;
+        }
+        
+        .admin-nav-links {
+            display: flex;
+            gap: 40px;
+            margin-left: 570px;
+        }
+        
+        .admin-nav-links a {
+            text-decoration: none;
+            color: #777552;
+            font-size: 1.1em;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: color 0.3s ease;
+        }
+        
+        .admin-nav-links a:hover {
+            color: #000000;
+        }
+        
+        .admin-user-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .admin-logout-btn {
+            text-decoration: none;
+            color: #000000;
+            font-size: 1.1em;
+            font-weight: 500;
+            padding: 8px 20px;
+            border: 1.5px solid #000000;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .admin-logout-btn:hover {
+            background-color: #000000;
+            color: white;
+        }
+
+       .admin-container {
+        margin-top: 80px;
+        padding: 40px;
+        font-family: Podkova, serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Центрування по горизонталі */
+        text-align: center;  /* Для тексту всередині (заголовок) */
+    }
+        .page-header {
+            margin-bottom: 30px;
+        }
+        
+        .page-header h1 {
+            font-family: 'TT Alientz Grotesque', sans-serif;
+            font-size: 36px;
+            font-weight: 400;
+            color: #000000;
+        }
+
+        .moderation-table {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            width: 1100px;
+        }
+        
+        .table th {
+            background-color: rgba(110, 108, 168, 0.2);
+            color: #000000;
+            font-weight: 600;
+            border: none;
+        }
+        
+        .table td {
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            vertical-align: middle;
+        }
+        
+        .btn-approve {
+            background-color: rgba(67, 173, 75, 0.61);
+            border-radius: 20px;
+            padding: 5px 15px;
+            color: #000000;
+            transition: all 0.3s;
+        }
+        
+        .btn-approve:hover {
+            background-color: #84d995;
+            transform: translateY(-2px);
+        }
+        
+        .btn-reject {
+            background-color: #ee7490;
+            border-radius: 20px;
+            padding: 5px 15px;
+            color: #000000;
+            transition: all 0.3s;
+        }
+        
+        .btn-reject:hover {
+            background-color: #ffb7ca;
+            transform: translateY(-2px);
+        }
+        
+        .empty-message {
+            text-align: center;
+            padding: 30px;
+            color: #777552;
+            font-size: 1.1em;
+        }
+        
+        .admin-footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            color: #777552;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
-    <div class="table-container">
-        <h1>Чернетки на модерацію</h1>
+    <!-- Навігаційна панель -->
+    <nav class="admin-navbar">
+        <div class="admin-logo">OBRIY</div>
         
-        <table class="table table-hover">
-            <thead class="table-light">
-                <tr>
-                    <th>Назва</th>
-                    <th>Автор</th>
-                    <th>Дата</th>
-                    <th>Дії</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for draft in drafts %}
-                <tr>
-                    <td>{{ draft.name }}</td>
-                    <td>{{ draft.author.username }}</td>
-                    <td>{{ draft.submitted_at|date:"d.m.Y H:i" }}</td>
-                    <td>
-                        <a href="/moderation/approve/{{ draft.id }}/" class="btn btn-success btn-sm">Затвердити</a>
-                        <a href="/moderation/reject/{{ draft.id }}/" class="btn btn-danger btn-sm">Відхилити</a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="4" class="text-center">Немає чернеток для модерації</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="admin-nav-links">
+            <a href="{% url 'home' %}">Головна</a>
+            <a href="{% url 'creature_list' %}">Усі істоти</a>
+            <a href="{% url 'usage' %}">Умови використання</a>
+            <a href="{% url 'about_us' %}">Про нас</a>
+        </div>
+        
+        <div class="admin-user-section">
+            <span>Адмін: {{ request.user.username }}</span>
+            <a href="/logout/" class="admin-logout-btn">
+                <i class="bi bi-box-arrow-right"></i> Вийти
+            </a>
+        </div>
+    </nav>
+
+    <!-- Основний вміст -->
+    <div class="admin-container">
+        <div class="page-header">
+            <h1>ЧЕРНЕТКИ НА МОДЕРАЦІЮ</h1>
+        </div>
+        
+        <div class="moderation-table">
+            {% if drafts %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Назва</th>
+                            <th>Автор</th>
+                            <th>Дата подання</th>
+                            <th>Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for draft in drafts %}
+                        <tr>
+                            <td>{{ draft.name }}</td>
+                            <td>{{ draft.author.username }}</td>
+                            <td>{{ draft.submitted_at|date:"d.m.Y H:i" }}</td>
+                            <td>
+                                <a href="/moderation/approve/{{ draft.id }}/" class="btn btn-approve me-2">
+                                    <i class="bi bi-check-circle"></i> Затвердити
+                                </a>
+                                <a href="/moderation/reject/{{ draft.id }}/" class="btn btn-reject">
+                                    <i class="bi bi-x-circle"></i> Відхилити
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-message">
+                <i class="bi bi-check2-all" style="font-size: 2rem;"></i>
+                <p style="margin-top: 15px;">Немає чернеток для модерації</p>
+            </div>
+            {% endif %}
+        </div>
     </div>
-<script>
-// Додаємо спеціальний клас до body для суперкористувача
-if (document.cookie.includes('superuser=true')) {
-    document.body.classList.add('is-superuser');
-}
-</script>
+
+    <footer class="admin-footer">
+        <div class="container">
+            <p>Система управління контентом OBRIY © {% now "Y" %}</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Додаємо спеціальний клас до body для суперкористувача
+        if (document.cookie.includes('superuser=true')) {
+            document.body.classList.add('is-superuser');
+        }
+    </script>
 </body>
 </html>

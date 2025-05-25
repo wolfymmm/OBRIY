@@ -98,8 +98,6 @@ class AdminActionLog(models.Model):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.object_id = None
-        self.object_type = None
 
     def __str__(self):
         return f"{self.get_action_display()} {self.object_type} #{self.object_id}"
@@ -112,6 +110,17 @@ class AdminActionLog(models.Model):
             'reject': 'warning',
             'delete': 'danger',
         }.get(self.action, 'secondary')
+
+    @classmethod
+    def log_admin_action(user, action, obj, details=''):
+        AdminActionLog.objects.create(
+            user=user,
+            action=action,
+            object_type=obj.__class__.__name__,
+            object_id=obj.id,
+            object_name=str(obj),
+            details=details
+        )
 
 
 class Role(models.Model):

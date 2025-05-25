@@ -13,10 +13,11 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('creatures/', views.creature_list, name='creature_list'),
     path('usage/', views.usage, name='usage'),
+    path('profile_settings/', views.profile_settings, name='profile_settings'),
     path('about_us/', views.about_us, name='about_us'),
 
     # Авторизація
-    path('login/', CustomLoginView.as_view(), name='login'),  # Тільки цей шлях для входу
+    path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', custom_logout, name='logout'),
     path('register/', views.register_view, name='register'),
 
@@ -43,6 +44,7 @@ urlpatterns = [
     path('creature/<int:creature_id>/', views.chuhaister, name='chuhaister'),
     path('creature/<int:creature_id>/edit/', views.edit_creature, name='edit_creature'),
     path('creature/<int:creature_id>/history/', views.creature_history, name='creature_history'),
+    path('search/', views.search_creatures, name='search_creatures'),
 
     # Сповіщення
     path('notifications/', include('django_nyt.urls')),

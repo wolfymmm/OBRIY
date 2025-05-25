@@ -3,46 +3,56 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Редагування {{ creature.name }} | Вікі істот</title>
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редагування {{ creature.name }} | OBRIY</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
+        @font-face {
+            font-family: 'TT Alientz Serif';
+            src: url('{% static "TTAlientz-Serif.eot" %}');
+            src: local('TT Alientz Serif'), local('TTAlientz-Serif'),
+                url('{% static "TTAlientz-Serif.eot?#iefix" %}') format('embedded-opentype'),
+                url('{% static "TTAlientz-Serif.woff2" %}') format('woff2'),
+                url('{% static "TTAlientz-Serif.woff" %}') format('woff'),
+                url('{% static "TTAlientz-Serif.ttf" %}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         body {
             margin: 0;
-            background: linear-gradient(#fce8e0, #d3e6f2);
+            background: linear-gradient(#fce8e0, #d7ccff);
             font-size: 16px;
             font-family: Podkova, serif;
         }
-        
-        .hero {
-            background-image: url('{% static "background.png" %}');
-            background-size: cover;
-            background-position: center;
-            height: 761px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 2rem;
-        }
-        
-        nav {
-            position: absolute;
-            top: 20px;
+
+        .admin-navbar {
+            position: fixed;
+            top: 0;
             left: 0;
             right: 0;
             display: flex;
-            justify-content: flex-start;
-            padding: 0 40px;
+            justify-content: space-between;
+            padding: 20px 40px;
             align-items: center;
+            z-index: 1000;
         }
         
-        .nav-links {
+        .admin-logo {
+            font-family: Monomakh;
+            font-weight: 400;
+            font-size: 1.8em;
+            color: #000000;
+        }
+        
+        .admin-nav-links {
             display: flex;
+            gap: 40px;
             margin-left: 550px;
-            gap: 60px;
         }
         
-        .nav-links a {
+        .admin-nav-links a {
             text-decoration: none;
             color: #777552;
             font-size: 1.1em;
@@ -51,342 +61,351 @@
             transition: color 0.3s ease;
         }
         
-        .nav-links a:hover {
+        .admin-nav-links a:hover {
             color: #000000;
         }
         
-        .nav-links a:first-child {
-            color: #000000 !important;
-        }
-
-        .nav-right {
-            margin-left: auto;
+        .admin-user-section {
             display: flex;
             align-items: center;
             gap: 20px;
         }
-
-        .logo {
-            font-family: Monomakh;
-            font-weight: 400;
-            font-size: 1.8em;
-            color: #000000;
-        }
         
-        .mini-search {
-            display: flex;
-            align-items: center;
-            border: 1px solid #ccc;
-            border-radius: 20px;
-            overflow: hidden;
-            background-color: rgba(255, 249.86, 152.29, 0.40);
-            height: 35px;
-            padding: 0 10px;
-        }
-
-        .mini-search input {
-            border: none;
-            padding: 0 15px;
-            font-size: 1em;
-            outline: none;
-            height: 100%;
-            background: transparent;
-            width: 120px;
-            margin: 0;
-            line-height: 35px;
-        }
-
-        .mini-search button {
-            border: none;
-            background-color: transparent;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            padding: 0 5px;
-        }
-
-        .mini-search button img {
-            width: 18px;
-            height: 18px;
-            object-fit: contain;
-        }
-
-        .login-btn {
+        .admin-logout-btn {
             text-decoration: none;
             color: #000000;
             font-size: 1.1em;
             font-weight: 500;
-            padding: 0 20px;
+            padding: 8px 20px;
             border: 1.5px solid #000000;
             border-radius: 30px;
             transition: all 0.3s ease;
-            height: 35px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            box-sizing: border-box;
-            line-height: 1;
-            margin-left: 15px;
+            gap: 8px;
         }
-
-        .login-btn:hover {
+        
+        .admin-logout-btn:hover {
             background-color: #000000;
             color: white;
         }
 
-        .main-container {
+        .admin-container {
+            margin-top: 100px;
+            padding: 40px;
             max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            display: flex;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .edit-form {
-            flex: 1;
-            background-color: white;
+        .edit-form-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
-
+        
+        .page-title {
+            font-family: 'TT Alientz Grotesque', sans-serif;
+            font-size: 36px;
+            font-weight: 400;
+            color: #000000;
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(110, 108, 168, 0.3);
+            padding-bottom: 15px;
+        }
+        
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
-
-        .form-group label {
+        
+        .form-label {
             display: block;
             margin-bottom: 8px;
-            font-weight: bold;
+            font-weight: 600;
             color: #333;
         }
-
-        .form-group input[type="text"],
-        .form-group textarea,
-        .form-group select {
+        
+        .form-control {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px 15px;
+            border: 1px solid rgba(110, 108, 168, 0.3);
+            border-radius: 8px;
             font-family: inherit;
             font-size: 1em;
+            background-color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s;
         }
-
-        .form-group textarea {
-            min-height: 150px;
+        
+        .form-control:focus {
+            border-color: #6e6ca8;
+            box-shadow: 0 0 0 0.2rem rgba(110, 108, 168, 0.2);
+            outline: none;
+        }
+        
+        textarea.form-control {
+            min-height: 200px;
             resize: vertical;
         }
-
+        
         .symbols-container {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
-
-        .symbols-input {
+        
+        .symbol-input-group {
             display: flex;
             align-items: center;
             margin-bottom: 10px;
         }
-
-        .symbols-input input {
+        
+        .symbol-input {
             flex: 1;
             margin-right: 10px;
         }
-
-        .remove-symbol {
-            background-color: #f44336;
+        
+        .btn-remove-symbol {
+            background-color: rgba(220, 53, 69, 0.8);
             color: white;
             border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-
-        #add-symbol {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
+            border-radius: 20px;
             padding: 8px 15px;
-            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-remove-symbol:hover {
+            background-color: rgba(220, 53, 69, 1);
+            transform: translateY(-2px);
+        }
+        
+        .btn-add-symbol {
+            background-color: rgba(106, 76, 147, 0.8);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
             cursor: pointer;
             margin-top: 10px;
+            transition: all 0.3s;
+            font-weight: 500;
         }
-
+        
+        .btn-add-symbol:hover {
+            background-color: rgba(106, 76, 147, 1);
+            transform: translateY(-2px);
+        }
+        
         .form-actions {
             display: flex;
             justify-content: flex-end;
             gap: 15px;
-            margin-top: 30px;
+            margin-top: 40px;
             padding-top: 20px;
-            border-top: 1px solid #eee;
+            border-top: 1px solid rgba(110, 108, 168, 0.2);
         }
-
+        
         .btn {
-            padding: 10px 25px;
+            padding: 12px 30px;
             border-radius: 30px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             border: none;
             font-size: 1em;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
-
+        
         .btn-save {
-            background-color: #4CAF50;
+            background-color: rgba(40, 167, 69, 0.8);
             color: white;
         }
-
+        
+        .btn-save:hover {
+            background-color: rgba(40, 167, 69, 1);
+            transform: translateY(-2px);
+        }
+        
         .btn-cancel {
-            background-color: #f44336;
+            background-color: rgba(108, 117, 125, 0.8);
             color: white;
         }
-
-        .btn:hover {
-            opacity: 0.9;
+        
+        .btn-cancel:hover {
+            background-color: rgba(108, 117, 125, 1);
             transform: translateY(-2px);
         }
         
         .current-image {
-            margin-top: 10px;
+            margin-top: 15px;
+            font-style: italic;
+            color: #6e6ca8;
+        }
+        
+        .current-image a {
+            color: #6e6ca8;
+            text-decoration: none;
+            border-bottom: 1px dashed #6e6ca8;
+        }
+        
+        .current-image a:hover {
+            color: #4a3f8f;
+            border-bottom-style: solid;
+        }
+        
+        .alert-danger {
+            background-color: rgba(220, 53, 69, 0.1);
+            border-left: 4px solid rgba(220, 53, 69, 0.8);
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .alert-danger ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .alert-danger li {
+            margin-bottom: 5px;
         }
     </style>
 </head>
 <body>
-<header>
-  <nav>
-    <div class="logo">OBRIY</div>
-    <div class="nav-links">
-      <a href="{% url 'home' %}">Головна</a>
-      <a href="{% url 'creature_list' %}">Усі істоти</a>
-      <a href="{% url 'usage' %}">Умови використання</a>
-      <a href="{% url 'about_us' %}">Про нас</a>
-    </div>
-    <div class="nav-right">
-      <form method="get" action="{% url 'home' %}" class="mini-search">
-        <input type="text" name="q" placeholder="" value="{{ query|default:'' }}">
-        <button type="submit">
-          <img src="{% static 'search.svg' %}" alt="Search" width="24" height="24">
-        </button>
-      </form>
-      <a href="{% url 'chuhaister' 1 %}" class="login-btn">Увійти</a>
-    </div>
-  </nav>
-</header>
-
-<div class="main-container">
-  <form method="post" class="edit-form" enctype="multipart/form-data">
-    {% csrf_token %}
-    <h1>Редагування істоти: {{ form.instance.name }}</h1>
-
-    {% if form.errors %}
-    <div class="alert alert-danger">
-        <ul>
-        {% for field, errors in form.errors.items %}
-            {% for error in errors %}
-                <li>{{ field|title }}: {{ error }}</li>
-            {% endfor %}
-        {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-
-    <div class="form-group">
-      <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
-      {{ form.name }}
-    </div>
-
-    <div class="form-group">
-      <label for="{{ form.type.id_for_label }}">{{ form.type.label }}</label>
-      {{ form.type }}
-    </div>
-
-    <div class="form-group">
-      <label for="{{ form.region.id_for_label }}">{{ form.region.label }}</label>
-      {{ form.region }}
-    </div>
-
-    <div class="form-group">
-      <label for="{{ form.appearance.id_for_label }}">{{ form.appearance.label }}</label>
-      {{ form.appearance }}
-    </div>
-
-    <div class="form-group">
-      <label for="{{ form.behavior.id_for_label }}">{{ form.behavior.label }}</label>
-      {{ form.behavior }}
-    </div>
-
-    <div class="form-group">
-      <label for="{{ form.role_in_mythology.id_for_label }}">{{ form.role_in_mythology.label }}</label>
-      {{ form.role_in_mythology }}
-    </div>
-
-    <div class="form-group">
-      <label for="symbols">Символи:</label>
-      <div id="symbols-container" class="symbols-container">
-        {% for symbol in form.instance.symbols %}
-        <div class="symbols-input">
-          <input type="text" name="symbols" value="{{ symbol }}">
-          <button type="button" class="remove-symbol">Видалити</button>
+    <nav class="admin-navbar">
+        <div class="admin-logo">OBRIY</div>
+        
+        <div class="admin-nav-links">
+            <a href="{% url 'home' %}">Головна</a>
+            <a href="{% url 'creature_list' %}">Усі істоти</a>
+            <a href="{% url 'usage' %}">Умови використання</a>
+            <a href="{% url 'about_us' %}">Про нас</a>
         </div>
-        {% empty %}
-        <div class="symbols-input">
-          <input type="text" name="symbols">
-          <button type="button" class="remove-symbol">Видалити</button>
+        
+        <div class="admin-user-section">
+            <span>Адмін: {{ request.user.username }}</span>
+            <a href="/logout/" class="admin-logout-btn">
+                <i class="bi bi-box-arrow-right"></i> Вийти
+            </a>
         </div>
-        {% endfor %}
-      </div>
-      <button type="button" id="add-symbol">Додати символ</button>
+    </nav>
+    
+    <div class="admin-container">
+        <div class="edit-form-container">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h1 class="page-title">Редагування істоти: {{ form.instance.name }}</h1>
+
+                {% if form.errors %}
+                <div class="alert-danger">
+                    <ul>
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <li>{{ field|title }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
+                    {{ form.name }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.type.id_for_label }}" class="form-label">{{ form.type.label }}</label>
+                    {{ form.type }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.region.id_for_label }}" class="form-label">{{ form.region.label }}</label>
+                    {{ form.region }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.appearance.id_for_label }}" class="form-label">{{ form.appearance.label }}</label>
+                    {{ form.appearance }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.behavior.id_for_label }}" class="form-label">{{ form.behavior.label }}</label>
+                    {{ form.behavior }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.role_in_mythology.id_for_label }}" class="form-label">{{ form.role_in_mythology.label }}</label>
+                    {{ form.role_in_mythology }}
+                </div>
+
+                <div class="form-group">
+                    <label for="symbols" class="form-label">Символи:</label>
+                    <div id="symbols-container" class="symbols-container">
+                        {% for symbol in form.instance.symbols %}
+                        <div class="symbol-input-group">
+                            <input type="text" name="symbols" value="{{ symbol }}" class="form-control symbol-input">
+                            <button type="button" class="btn-remove-symbol"><i class="bi bi-trash"></i> Видалити</button>
+                        </div>
+                        {% empty %}
+                        <div class="symbol-input-group">
+                            <input type="text" name="symbols" class="form-control symbol-input">
+                            <button type="button" class="btn-remove-symbol"><i class="bi bi-trash"></i> Видалити</button>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" id="add-symbol" class="btn-add-symbol"><i class="bi bi-plus-circle"></i> Додати символ</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.description.id_for_label }}" class="form-label">{{ form.description.label }}</label>
+                    {{ form.description }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.sources.id_for_label }}" class="form-label">{{ form.sources.label }}</label>
+                    {{ form.sources }}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.image_url.id_for_label }}" class="form-label">{{ form.image_url.label }}</label>
+                    {{ form.image_url }}
+                    {% if form.instance.image_url %}
+                        <p class="current-image">Поточне зображення: <a href="{{ form.instance.image_url }}" target="_blank">Переглянути</a></p>
+                    {% endif %}
+                </div>
+
+                <div class="form-actions">
+                    <a href="{% url 'chuhaister' form.instance.id %}" class="btn btn-cancel"><i class="bi bi-x-circle"></i> Скасувати</a>
+                    <button type="submit" class="btn btn-save"><i class="bi bi-save"></i> Зберегти зміни</button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <div class="form-group">
-      <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
-      {{ form.description }}
-    </div>
-
-    <div class="form-group">
-      <label for="{{ form.sources.id_for_label }}">{{ form.sources.label }}</label>
-      {{ form.sources }}
-    </div>
-
-    <div class="form-group">
-      <label for="{{ form.image_url.id_for_label }}">{{ form.image_url.label }}</label>
-      {{ form.image_url }}
-      {% if form.instance.image_url %}
-        <p class="current-image">Поточне зображення: <a href="{{ form.instance.image_url }}" target="_blank">Переглянути</a></p>
-      {% endif %}
-    </div>
-
-    <div class="form-actions">
-      <button type="submit" class="btn btn-save">Зберегти зміни</button>
-      <a href="{% url 'chuhaister' form.instance.id %}" class="btn btn-cancel">Скасувати</a>
-    </div>
-  </form>
-</div>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Додавання нового поля для символу
-    document.getElementById('add-symbol').addEventListener('click', function() {
-      const container = document.getElementById('symbols-container');
-      const div = document.createElement('div');
-      div.className = 'symbols-input';
-      div.innerHTML = `
-        <input type="text" name="symbols">
-        <button type="button" class="remove-symbol">Видалити</button>
-      `;
-      container.appendChild(div);
-    });
-
-    // Видалення поля символу
-    document.addEventListener('click', function(e) {
-      if (e.target && e.target.classList.contains('remove-symbol')) {
-        e.target.parentElement.remove();
-      }
-    });
-  });
-</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('add-symbol').addEventListener('click', function() {
+                const container = document.getElementById('symbols-container');
+                const div = document.createElement('div');
+                div.className = 'symbol-input-group';
+                div.innerHTML = `
+                    <input type="text" name="symbols" class="form-control symbol-input">
+                    <button type="button" class="btn-remove-symbol"><i class="bi bi-trash"></i> Видалити</button>
+                `;
+                container.appendChild(div);
+            });
+            
+            document.addEventListener('click', function(e) {
+                if (e.target && (e.target.classList.contains('btn-remove-symbol') || 
+                                e.target.closest('.btn-remove-symbol'))) {
+                    const btn = e.target.classList.contains('btn-remove-symbol') ? 
+                               e.target : e.target.closest('.btn-remove-symbol');
+                    btn.parentElement.remove();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

@@ -4,107 +4,375 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Домашня сторінка - Yanam</title>
-  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap" rel="stylesheet">
+  <title>Профіль - Yanam | OBRIY</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Podkova:wght@500;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary: #6e6ca8;
+      --secondary: #fdc5b9;
+      --accent: #ff9e73;
+      --light: #fafcea;
+      --dark: #1d1d1b;
+      --text: #333333;
+    }
+    
     body {
-      font-family: 'Comfortaa', cursive;
-      background-color: #fafcea;
-      color: #1d1d1b;
+      font-family: 'Podkova', serif;
+    background: linear-gradient(#fce8e0, #d7ccff);
+      color: var(--text);
       margin: 0;
       padding: 0;
+      line-height: 1.6;
     }
-    header, nav, .content, .sidebar {
-      padding: 1rem 2rem;
-    }
+    
     header {
+      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
+    
     .logo {
+      font-family: 'Comfortaa', cursive;
       font-weight: bold;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
+      color: var(--primary);
+      letter-spacing: 1px;
     }
-    nav a {
-      margin: 0 1rem;
-      text-decoration: none;
-      color: #1d1d1b;
-      font-weight: bold;
-    }
-    .search-bar {
+    
+    nav {
       display: flex;
-      align-items: center;
-      margin: 1rem 0;
+      gap: 2rem;
     }
-    .search-bar input {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 25px 0 0 25px;
-      width: 300px;
-      background: #aaa;
-      color: white;
+    
+    nav a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      position: relative;
     }
-    .search-bar button {
-      padding: 0.5rem 1rem;
-      border: none;
-      border-radius: 0 25px 25px 0;
-      background: #f6f08a;
-      font-weight: bold;
+    
+    nav a:hover {
+      color: var(--primary);
+    }
+    
+    nav a.active {
+      color: var(--primary);
+      font-weight: 700;
+    }
+    
+    nav a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: var(--accent);
+      border-radius: 3px;
+    }
+    
+    .user-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--secondary);
       cursor: pointer;
+      transition: transform 0.3s ease;
     }
+    
+    .user-avatar:hover {
+      transform: scale(1.05);
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    
+    .welcome-section {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .welcome-title {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    
+    .welcome-subtitle {
+      font-size: 1.2rem;
+      color: var(--text);
+      opacity: 0.8;
+    }
+    
     .tabs {
       display: flex;
-      margin: 1rem 0;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 0.5rem;
     }
+    
     .tabs a {
-      margin-right: 1rem;
-      padding-bottom: 5px;
       text-decoration: none;
-      color: #1d1d1b;
-      border-bottom: 2px solid transparent;
+      color: var(--text);
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      transition: all 0.3s ease;
     }
+    
     .tabs a.active {
-      border-color: #ff9e73;
+      background-color: var(--primary);
+      color: white;
+      font-weight: 600;
     }
-    .main {
+    
+    .tabs a:hover:not(.active) {
+      background-color: rgba(110, 108, 168, 0.1);
+    }
+    
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    
+    .profile-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .profile-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
+    .profile-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .profile-pic {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--secondary);
+      margin-right: 1.5rem;
+    }
+    
+    .profile-info h2 {
+      margin: 0;
+      color: var(--primary);
+      font-size: 1.8rem;
+    }
+    
+    .profile-info p {
+      margin: 0.3rem 0;
+      color: var(--text);
+      opacity: 0.8;
+    }
+    
+    .profile-details {
+      margin-top: 1.5rem;
+    }
+    
+    .detail-item {
+      display: flex;
+      margin-bottom: 1rem;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      color: var(--primary);
+      min-width: 150px;
+    }
+    
+    .detail-value {
+      color: var(--text);
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      font-family: 'Podkova', serif;
+      font-size: 1rem;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #5a588f;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(110, 108, 168, 0.3);
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+    
+    .btn-outline:hover {
+      background-color: rgba(110, 108, 168, 0.1);
+    }
+    
+    .impact-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f5ecff 100%);
+    }
+    
+    .impact-header {
       display: flex;
       justify-content: space-between;
-      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 1.5rem;
     }
-    .card {
-      background: linear-gradient(to bottom right, #c9c8ec, #fcecd6);
+    
+    .impact-title {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin: 0;
+    }
+    
+    .impact-chart {
+      width: 100%;
+      height: 200px;
+      background-color: white;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .impact-chart img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    
+    .impact-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .stat-item {
+      background-color: white;
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.3rem;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--text);
+      opacity: 0.8;
+    }
+    
+    .settings-sidebar {
+      background: white;
       border-radius: 20px;
       padding: 1.5rem;
-      flex: 1;
-      margin: 1rem;
-      min-width: 280px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      margin-top: 2rem;
     }
-    .impact {
-      background: linear-gradient(to bottom right, #fcecd6, #e3ebf2);
+    
+    .settings-title {
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #eee;
     }
-    .profile-pic {
-      border-radius: 50%;
-      width: 80px;
-      height: 80px;
+    
+    .settings-menu {
+      list-style: none;
+      padding: 0;
+      margin: 0;
     }
-    .button-edit {
-      border: 1px solid #1d1d1b;
-      border-radius: 20px;
-      padding: 0.5rem 1rem;
-      background: none;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-    aside {
-      margin: 2rem 0;
-    }
-    aside a {
-      display: block;
+    
+    .settings-menu li {
       margin-bottom: 1rem;
+    }
+    
+    .settings-menu a {
+      display: flex;
+      align-items: center;
       text-decoration: none;
-      color: #1d1d1b;
-      font-weight: bold;
+      color: var(--text);
+      font-weight: 500;
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .settings-menu a:hover {
+      background-color: rgba(110, 108, 168, 0.1);
+      color: var(--primary);
+    }
+    
+    .settings-menu a::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      margin-right: 10px;
+      background-color: var(--secondary);
+      mask-size: contain;
+      mask-position: center;
+      mask-repeat: no-repeat;
+    }
+    
+    .settings-menu a.logout::before {
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000000'%3E%3Cpath d='M16 17v-3H9v-4h7V7l5 5-5 5M14 2a2 2 0 0 1 2 2v2h-2V4H5v16h9v-2h2v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9z'/%3E%3C/svg%3E");
+    }
+    
+    @media (max-width: 768px) {
+      .profile-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      nav {
+        gap: 1rem;
+      }
+      
+      .tabs {
+        flex-wrap: wrap;
+      }
     }
   </style>
 </head>
@@ -112,48 +380,95 @@
   <header>
     <div class="logo">OBRIY</div>
     <nav>
-      <a href="#">Головна</a>
-      <a href="#" style="text-decoration: underline;">Усі істоти</a>
-      <a href="#">Умови використання</a>
-      <a href="#">Про нас</a>
+      <a href="{% url 'home' %}">Головна</a>
+      <a href="{% url 'creature_list' %}" class="active">Усі істоти</a>
+      <a href="{% url 'usage' %}">Умови використання</a>
+      <a href="{% url 'about_us' %}">Про нас</a>
     </nav>
-    <div class="avatar">
-      <img src="impact.png" alt="avatar" style="width:40px; border-radius:50%;">
-    </div>
+    <img src="{% static 'creatures/Ellipse.png' %}" alt="Аватар" class="user-avatar">
   </header>
 
-  <div class="search-bar">
-    <input type="text" placeholder="Ваш запит">
-    <button>Шукати</button>
-  </div>
+  <div class="container">
+    <section class="welcome-section">
+      <h1 class="welcome-title">Вітаємо, Yanam!</h1>
+      <p class="welcome-subtitle">Ваш особистий кабінет у світі міфічних істот</p>
+    </section>
 
-  <section class="content">
-    <h2>ВІТАЄМО, YANAM!!</h2>
     <div class="tabs">
       <a href="#" class="active">Домашня сторінка</a>
       <a href="#">Редагувати статтю</a>
       <a href="{% url 'create_draft' %}">Створити статтю</a>
     </div>
-    <div class="main">
-      <div class="card">
-        <div class="profile-pic"></div>
-        <h2>Yanam</h2>
-        <p>Яна Марусіна</p>
-        <p>marusina.yana@lll.kpi.ua</p>
-        <p><strong>Учасник з:</strong> 08.05.2025</p>
-        <button class="button-edit">Редагувати</button>
+
+    <div class="profile-grid">
+      <div class="profile-card">
+        <div class="profile-header">
+          <img src="{% static 'creatures/Ellipse.png' %}" alt="Фото профілю" class="profile-pic">
+          <div class="profile-info">
+            <h2>Yanam</h2>
+            <p>Яна Марусіна</p>
+            <p>marusina.yana@lll.kpi.ua</p>
+          </div>
+        </div>
+        
+        <div class="profile-details">
+          <div class="detail-item">
+            <span class="detail-label">Дата реєстрації:</span>
+            <span class="detail-value">08.05.2025</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Статус:</span>
+            <span class="detail-value">Активний учасник</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Роль:</span>
+            <span class="detail-value">Редактор</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Остання активність:</span>
+            <span class="detail-value">Сьогодні, 15:42</span>
+          </div>
+          
+          <button class="btn btn-primary" style="margin-top: 1.5rem;">Редагувати профіль</button>
+        </div>
       </div>
-      <div class="card impact">
-        <h2>Ваш вплив</h2>
-        <img src="{% static 'impact.png' %}" alt="Вплив" style="width: 100%; height: auto;">
-        <p><strong>Кількість редагувань:</strong> 4</p>
+
+      <div class="profile-card impact-card">
+        <div class="impact-header">
+          <h2 class="impact-title">Ваш вплив</h2>
+        </div>
+        
+        <div class="impact-chart">
+          <img src="{% static 'impact.png' %}" alt="Графік активності">
+        </div>
+        
+        <div class="impact-stats">
+          <div class="stat-item">
+            <div class="stat-value">4</div>
+            <div class="stat-label">Редагувань</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">1</div>
+            <div class="stat-label">Створених статей</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">12</div>
+            <div class="stat-label">Коментарів</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">87</div>
+            <div class="stat-label">Переглядів</div>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
 
-  <aside>
-    <h3>НАЛАШТУВАННЯ</h3>
-    <a href="#">🔓 Вихід</a>
-  </aside>
+    <div class="settings-sidebar">
+      <h3 class="settings-title">Налаштування</h3>
+      <ul class="settings-menu">
+        <li><a href="#" class="logout">🔓 Вийти з акаунту</a></li>
+      </ul>
+    </div>
+  </div>
 </body>
 </html>

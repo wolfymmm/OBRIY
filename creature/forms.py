@@ -66,12 +66,9 @@ class RegisterForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
 
-        # Автоматичне призначення ролі "Редактор"
         editor_role, created = Role.objects.get_or_create(name='Редактор')
         user.role = editor_role
 
         if commit:
             user.save()
         return user
-
-    # Видаліть метод __init__ (він більше не потрібен)

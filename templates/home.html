@@ -202,7 +202,7 @@
         }
         
         .nav-links a:first-child {
-            color: #000000 !important; /* Головна завжди чорна */
+            color: #000000 !important; 
         }
 
         .nav-right {
@@ -226,8 +226,8 @@
     border-radius: 20px;
     overflow: hidden;
     background-color: rgba(255, 249.86, 152.29, 0.40);
-    height: 35px; /* Фіксована висота */
-    padding: 0 10px; /* Додатковий внутрішній відступ */
+    height: 35px; 
+    padding: 0 10px; 
 }
 
 .mini-search input {
@@ -235,11 +235,11 @@
     padding: 0 15px;
     font-size: 1em;
     outline: none;
-    height: 100%; /* Заповнює всю доступну висоту */
+    height: 100%; 
     background: transparent;
     width: 120px;
     margin: 0;
-    line-height: 35px; /* Вирівнювання тексту по вертикалі */
+    line-height: 35px; 
 }
 
 .mini-search button {
@@ -249,7 +249,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%; /* Заповнює всю доступну висоту */
+    height: 100%; 
     padding: 0 5px;
 }
 
@@ -268,13 +268,13 @@
     border: 1.5px solid #000000;
     border-radius: 30px;
     transition: all 0.3s ease;
-    height: 35px; /* Така сама висота */
+    height: 35px; 
     display: flex;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
     line-height: 1;
-    margin-left: 15px; /* Відступ від пошуку */
+    margin-left: 15px; 
 }
 
 .login-btn:hover {
@@ -294,7 +294,7 @@
             <a href="{% url 'about_us' %}">Про нас</a>
         </div>
         <div class="nav-right">
-    <form method="get" action="{% url 'home' %}" class="mini-search">
+    <form method="get" action="{% url 'search_creatures' %}" class="mini-search">
         <input type="text" name="q" placeholder="" value="{{ query|default:'' }}">
         <button type="submit">
             <img src="{% static 'search.svg' %}" alt="Search" width="24" height="24">
@@ -306,9 +306,9 @@
 
     <div class="hero">
         <h1><span>ЛАСКАВО ПРОСИМО</span><span>ЗА ОБРІЙ</span></h1>
-        <form method="get" action="{% url 'home' %}" class="search-box">
-            <input type="text" name="q" placeholder="Ваш запит" value="{{ query|default:'' }}">
-            <button type="submit">Шукати</button>
+        <form method="get" action="{% url 'search_creatures' %}" class="search-box">
+        <input type="text" name="q" placeholder="Ваш запит" value="{{ query|default:'' }}">
+        <button type="submit">Шукати</button>
         </form>
     </div>
 

@@ -3,24 +3,95 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OBRIY - Занурся в легенди українського краю</title>
+    <title>Результати пошуку</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet">
     <style>
-        @font-face {
-            font-family: 'Monomakh';
-            src: url('{% static "fonts/Monomakh-Unicode.ttf" %}') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-        
         body {
             margin: 0;
-            padding: 0;
-            background-color: #fdfce8;
-            font-family: 'Podkova', serif;
-            color: #333;
+            background: #F9FBEA;
+            font-size: 16px;
+            font-family: Podkova, serif;
         }
-        
+        .container {
+            max-width: 1000px;
+            margin: 50px auto 0 auto;
+            padding: 40px 20px;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .no-result {
+            margin-top: 20px;
+            font-size: 18px;
+            align-items: center;
+        }
+
+        .no-result a {
+            color: #654fa1;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .related-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .creature-card {
+            display: flex;
+            align-items: flex-start;
+            background-color: #dcebe0;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .creature-card:nth-child(2n) {
+            background-color: #e2eeda;
+        }
+
+        .creature-card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .creature-info {
+            flex: 1;
+        }
+
+        .creature-info h3 {
+            margin: 0;
+            font-size: 20px;
+            text-transform: uppercase;
+        }
+
+        .creature-info p {
+            margin: 10px 0;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        .view-link {
+            display: inline-block;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #444;
+            text-decoration: underline;
+        }
         .search-box {
             display: flex;
             width: 500px;
@@ -29,6 +100,7 @@
             border-radius: 30px;
             overflow: hidden;
             position: relative;
+            align-items: center;
         }
 
         .search-box input {
@@ -138,8 +210,7 @@
                 background-size: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
             }
         }
-
-        nav {
+         nav {
             position: absolute;
             top: 20px;
             left: 0;
@@ -194,8 +265,8 @@
     border-radius: 20px;
     overflow: hidden;
     background-color: rgba(255, 249.86, 152.29, 0.40);
-    height: 35px; 
-    padding: 0 10px; 
+    height: 35px;
+    padding: 0 10px;
 }
 
 .mini-search input {
@@ -217,7 +288,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    height: 100%; 
     padding: 0 5px;
 }
 
@@ -236,7 +307,7 @@
     border: 1.5px solid #000000;
     border-radius: 30px;
     transition: all 0.3s ease;
-    height: 35px; 
+    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -249,160 +320,10 @@
     background-color: #000000;
     color: white;
 }
-        
-
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 60px 20px;
-        }
-        
-        .page-title {
-            font-family: 'TT Alientz Grotesque', sans-serif;
-            font-size: 40px;
-            font-weight: 200;
-            text-align: center;
-            margin-bottom: 2px;
-            color: #000;
-        }
-        
-        .page-subtitle {
-            font-family: 'Podkova', serif;
-            font-size: 24px;
-            text-align: center;
-            margin-bottom: 30px;
-            margin-top: 5px;
-            color: #555;
-        }
-        
-        .search-container {
-            margin-bottom: 60px;
-        }
-        
-        .search-box {
-            width: 690px;
-            height: 60px;
-            background-color: rgba(110, 108, 168, 0.5);
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            padding: 0 25px;
-            box-sizing: border-box;
-        }
-        
-        .search-box input {
-            flex: 1;
-            border: none;
-            background: transparent;
-            outline: none;
-            font-family: 'Podkova', serif;
-            font-size: 18px;
-            color: #000;
-        }
-        
-        .search-box input::placeholder {
-            color: #555;
-        }
-        
-        .search-btn {
-            background-color: #ffce52;
-            border: none;
-            border-radius: 25px;
-            padding: 10px 25px;
-            font-family: 'Podkova', serif;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        
-        .search-btn:hover {
-            transform: scale(1.05);
-        }
-        
-         .creatures-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 1500px;
-            margin: 0 auto;
-        }
-         .creature-card {
-            background-color: rgba(255, 255, 255, 0.7);
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-             text-align: center;
-             text-transform: uppercase;
-        }
-        
-        .creature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-        
-        .card-image {
-            width: 85%;
-            height: 300px;
-            object-fit: cover;
-            margin-top: 25px;
-            margin-right: 17px;
-            margin-left: 19px;
-            border-radius: 28px;
-        }
-        
-       
-        .card-title {
-            font-family: 'Podkova', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            color: #000;
-        }
-         .header-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 30px;
-             width: 100%;
-    }
-    
-    .page-title {
-        font-family: 'TT Alientz Grotesque', sans-serif;
-        font-size: 40px;
-        font-weight: 200;
-        text-align: center;
-        color: #000;
-        margin-top: 10px;
-        text-transform: uppercase;
-         white-space: nowrap; 
-    }
-    
-    .page-subtitle {
-        font-family: 'Montserrat Alternates', serif;
-        font-size: 18px;
-        font-weight: 400;
-        text-align: center;
-        margin-top: -30px;
-         margin-bottom: 40px;
-        color: #555;
-         white-space: nowrap; 
-    }
-    
-        .card-color-1 { background-color: #f0f8ff; }
-        .card-color-2 { background-color: #fff0f5; }
-        .card-color-3 { background-color: #f0fff0; }
-        .card-color-4 { background-color: #fff8dc; }
-        .card-color-5 { background-color: #f5f5f5; }
-        .card-color-6 { background-color: #f0ffff; }
     </style>
 </head>
 <body>
-    <nav>
+ <nav>
         <div class="logo">OBRIY</div>
         <div class="nav-links">
             <a href="{% url 'home' %}">Головна</a>
@@ -411,45 +332,48 @@
             <a href="{% url 'about_us' %}">Про нас</a>
         </div>
         <div class="nav-right">
-            <form method="get" action="{% url 'search_creatures' %}" class="mini-search">
-                <input type="text" name="q" placeholder="" value="{{ query|default:'' }}">
-                <button type="submit">
-                    <img src="{% static 'search.svg' %}" alt="Search" width="24" height="24">
-                </button>
-            </form>
-            <a href="#" class="login-btn">Увійти</a>
-        </div>
+    <form method="get" action="{% url 'home' %}" class="mini-search">
+        <input type="text" name="q" placeholder="" value="{{ query|default:'' }}">
+        <button type="submit">
+            <img src="{% static 'search.svg' %}" alt="Search" width="24" height="24">
+        </button>
+    </form>
+   <a href="{% url 'login' %}" class="login-btn">Увійти</a>
+</div>
     </nav>
-    
-    <div class="main-content">
-    <img src="{% static 'frog.png' %}" alt="Frog" style="width: 150px; margin-top: 50px;">
-    
-    <div class="header-container" style="display: flex; flex-direction: column; align-items: center;">
-        <div style="display: flex; align-items: center; justify-content: center; gap: 30px; width: 100%;">
-            <img src="{% static 'line.png' %}" alt="Line left" height="130px" width=auto>
-            <h1 class="page-title">Занурся в легенди</h1>
-            <img src="{% static 'line.png' %}" alt="Line right" height="130px" width=auto>
-        </div>
-         <p class="page-subtitle">українського краю</p>
-    </div>
-    
-    <div class="search-container">
-        <form method="get" action="{% url 'search_creatures' %}" class="search-box">
-            <input type="text" name="q" placeholder="Ваш запит" value="{{ query|default:'' }}">
-            <button type="submit">Шукати</button>
+    <div class="container">
+        <h1>РЕЗУЛЬТАТИ ПОШУКУ</h1>
+     <form method="get" action="{% url 'search_creatures' %}" class="search-box">
+        <input type="text" name="q" placeholder="Ваш запит" value="{{ query|default:'' }}">
+        <button type="submit">Шукати</button>
         </form>
-    </div>
-    
-    <div class="creatures-grid">
-        {% for creature in creatures %}
-        <a href="{% url 'chuhaister' creature.id %}" class="creature-card card-color-{{ forloop.counter }}">
-    <img src="{{ creature.image_url }}" alt="{{ creature.name }}" class="card-image">
-    <div class="card-content">
-        {{ creature.name }}
-    </div>
-</a>
-        {% endfor %}
-        </div>
+
+        {% if not exact_match %}
+            <p class="no-result">
+                Конкретної істоти з такою назвою не існує. Ви можете
+                <a href="{% url 'login' %}">створити її</a>
+            </p>
+        {% endif %}
+
+        {% if results %}
+            <h2 class="related-title">Пов’язані істоти:</h2>
+            {% for creature in results %}
+                <div class="creature-card">
+                    {% if creature.image_url %}
+                    <img src="{{ creature.image_url }}" alt="{{ creature.name }}">
+                {% else %}
+                    <img src="{% static 'frog.png' %}" alt="Немає зображення">
+                {% endif %}
+
+
+                    <div class="creature-info">
+                        <h3>{{ creature.name }}</h3>
+                        <p>{{ creature.description|truncatewords:30 }}</p>
+                        <a href="{% url 'chuhaister' creature.id %}" class="view-link">Переглянути</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
 </body>
 </html>

@@ -375,7 +375,7 @@
         </div>
         <div class="nav-right">
             <form method="get" action="{% url 'home' %}" class="mini-search">
-                <input type="text" name="q" placeholder="Пошук..." value="{{ query|default:'' }}">
+                <input type="text" name="q" placeholder="" value="{{ query|default:'' }}">
                 <button type="submit">
                     <img src="{% static 'search.svg' %}" alt="Search" width="24" height="24">
                 </button>

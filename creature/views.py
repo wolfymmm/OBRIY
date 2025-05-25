@@ -6,33 +6,48 @@ from django.contrib.auth import logout
 from django.urls import reverse_lazy
 from creature.models import User
 from django.contrib.auth import login
-from django.utils import timezone
-from datetime import timedelta
-from django.views import View
 from .models import Creature, CreatureDraft, AdminActionLog
-from django.contrib.auth.hashers import make_password
-from .forms import CreatureForm, CreatureDraftForm, RegisterForm
-from django.utils.decorators import method_decorator
-from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import CreatureForm, RegisterForm
 from django.contrib.admin.views.decorators import staff_member_required
-from django.core.files.storage import FileSystemStorage
-import os
-from django.conf import settings
 import logging
 logger = logging.getLogger(__name__)
 
 
-# Функція для перевірки, чи є користувач адміністратором
+def search_creatures(request):
+    query = request.GET.get('q')
+    results = []
+    exact_match = False
+
+    if query:
+        exact_results = Creature.objects.filter(name__iexact=query)
+        if exact_results.exists():
+            results = exact_results
+            exact_match = True
+        else:
+            results = Creature.objects.filter(
+                name__icontains=query
+            ) | Creature.objects.filter(
+                type__icontains=query
+            ) | Creature.objects.filter(
+                region__icontains=query
+            )
+
+    return render(request, 'search_results.html', {
+        'results': results,
+        'query': query,
+        'exact_match': exact_match
+    })
+
+
 def is_admin(user):
     return user.is_staff
 
-# Перевірка доступу для неавторизованих користувачів
+
 def check_auth(request):
     if not request.user.is_authenticated:
-        return redirect('edit_auth_required')  # Перенаправлення на сторінку для неавторизованих
+        return redirect('edit_auth_required')
     return None
 
-# Сторінка редагування для авторизованих користувачів
 @login_required
 def edit_creature(request, creature_id):
     creature = get_object_or_404(Creature, id=creature_id)
@@ -41,12 +56,22 @@ def edit_creature(request, creature_id):
         form = CreatureForm(request.POST, instance=creature)
 
         if form.is_valid():
-            if request.user.is_staff:  # Якщо користувач є адміністратором
-                form.save()  # Зберігаємо зміни в базі
+            if request.user.is_staff:
+                form.save()
+
+                AdminActionLog.objects.create(
+                    user=request.user,
+                    action='edit',
+                    object_type='Creature',
+                    object_id=creature.id,
+                    object_name=creature.name,
+                    details='Редагування існуючої істоти адміністратором.'
+                )
+
                 messages.success(request, 'Зміни успішно збережено.')
-                return redirect('creature_detail', creature_id=creature.id)
+                return redirect('chuhaister', creature_id=creature.id)
+
             else:
-                # Якщо користувач не адміністратор, створюємо запит на редагування
                 draft = CreatureDraft(
                     author=request.user,
                     name=form.cleaned_data['name'],
@@ -60,8 +85,19 @@ def edit_creature(request, creature_id):
                     image_url=form.cleaned_data.get('image_url', '')
                 )
                 draft.save()
+
+                AdminActionLog.objects.create(
+                    user=request.user,
+                    action='create',
+                    object_type='CreatureDraft',
+                    object_id=draft.id,
+                    object_name=draft.name,
+                    details=f'Запит на редагування істоти #{creature.id} ({creature.name})'
+                )
+
                 messages.success(request, 'Запит на редагування надіслано на модерацію.')
-                return redirect('draft_submitted')  # Перенаправлення на сторінку підтвердження
+                return redirect('draft_submitted')
+
     else:
         form = CreatureForm(instance=creature)
 
@@ -70,12 +106,6 @@ def edit_creature(request, creature_id):
         'creature': creature
     })
 
-
-# Перевірка доступу для неавторизованих користувачів
-def edit_auth_required(request):
-    return render(request, 'edit_auth_required.html')
-
-# Відображення чернеток для адміністраторів
 @user_passes_test(is_admin)
 def approve_creature_drafts(request):
     drafts = CreatureDraft.objects.filter(is_approved=False)
@@ -87,18 +117,14 @@ def approve_draft(request, draft_id):
     draft = get_object_or_404(CreatureDraft, id=draft_id)
 
     if request.method == 'POST':
-        # Визначаємо, яку істоту оновлювати чи створювати
         creature = None
 
         if draft.creature:
-            # Чернетка редагування: оновлюємо існуючу істоту
             creature = draft.creature
         else:
-            # Чернетка створення: перевіряємо, чи така істота вже є
             creature = Creature.objects.filter(name__iexact=draft.name).first()
 
         if creature:
-            # Оновлюємо наявну істоту
             creature.name = draft.name
             creature.type = draft.type
             creature.region = draft.region
@@ -110,7 +136,6 @@ def approve_draft(request, draft_id):
             creature.image_url = draft.image_url
             creature.save()
         else:
-            # Створюємо нову істоту
             creature = Creature.objects.create(
                 name=draft.name,
                 type=draft.type,
@@ -137,7 +162,6 @@ def approve_draft(request, draft_id):
 def create_creature_draft(request):
     if request.method == 'POST':
         try:
-            # Отримуємо дані з форми
             draft = CreatureDraft(
                 author=request.user,
                 name=request.POST.get('name'),
@@ -150,13 +174,21 @@ def create_creature_draft(request):
                 sources=request.POST.get('sources', ''),
                 image_url=request.POST.get('image_url', '')
             )
-
-            # Обробляємо символи
+            draft.save()
             symbols = request.POST.get('symbols', '')
             if symbols:
                 draft.symbols = [s.strip() for s in symbols.split(',')]
+                draft.save(update_fields=['symbols'])
 
-            draft.save()
+            AdminActionLog.objects.create(
+                user=request.user,
+                action='create',
+                object_type='CreatureDraft',
+                object_id=draft.id,
+                object_name=draft.name,
+                details='Створено нову чернетку істоти'
+            )
+
             messages.success(request, 'Чернетку успішно надіслано на модерацію!')
             return redirect('draft_submitted')
 
@@ -169,22 +201,17 @@ def create_creature_draft(request):
 
 @staff_member_required
 def admin_dashboard(request):
-    """
-    Адмін-панель для персоналу
-    """
+
     pending_count = CreatureDraft.objects.filter(
         is_approved=False,
         is_rejected=False
     ).count()
 
+
     total_articles = Creature.objects.count()
     rejected_count = CreatureDraft.objects.filter(is_rejected=True).count()
-
-    # Використовуємо вашу кастомну модель User
     users_count = User.objects.filter(is_active=True).count()
-
-    recent_actions = AdminActionLog.objects.select_related('user') \
-                         .order_by('-timestamp')[:5]
+    recent_actions = AdminActionLog.objects.select_related('user').order_by('-timestamp')[:5]
 
     context = {
         'pending_count': pending_count,
@@ -196,16 +223,26 @@ def admin_dashboard(request):
 
     return render(request, 'admin_dashboard.html', context)
 
+def log_admin_action(user, action, obj, details=''):
+    AdminActionLog.objects.create(
+        user=user,
+        action=action,
+        object_type=obj.__class__.__name__,
+        object_id=obj.id,
+        object_name=str(obj),
+        details=details
+    )
+
+    log_admin_action(request.user, 'create', instance)
+
 @staff_member_required
 def moderation_queue(request):
-    """Черга модерації статей"""
     drafts = CreatureDraft.objects.filter(is_approved=False, is_rejected=False)
     return render(request, 'moderation_queue.html', {'drafts': drafts})
 
 
 @staff_member_required
 def reject_draft(request, draft_id):
-    """Відхилення чернетки статті"""
     draft = get_object_or_404(CreatureDraft, id=draft_id)
 
     if request.method == 'POST':
@@ -218,11 +255,9 @@ def reject_draft(request, draft_id):
     return render(request, 'reject_draft.html', {'draft': draft})
 
 def draft_submitted(request):
-    """Підтвердження відправки чернетки"""
     return render(request, 'draft_submitted.html')
 
 def creature_history(request, creature_id):
-    """Історія змін статті"""
     creature = get_object_or_404(Creature, id=creature_id)
     history = creature.history.order_by('-edited_at')
     return render(request, 'creature_history.html', {'creature': creature, 'history': history})
@@ -287,7 +322,6 @@ def custom_logout(request):
 
 # Допоміжні функції
 def create_admin_log_entry(user, action, object_type, object_id, object_name, details=''):
-    """Створення запису в лог адмін-дій"""
     AdminActionLog.objects.create(
         user=user,
         action=action,
@@ -300,3 +334,7 @@ def create_admin_log_entry(user, action, object_type, object_id, object_name, de
 @login_required
 def user_profile(request):
     return render(request, 'user_profile.html')
+
+@login_required
+def profile_settings(request):
+    return render(request, 'profile_settings.html')
